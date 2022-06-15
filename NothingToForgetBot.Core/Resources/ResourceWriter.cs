@@ -36,8 +36,6 @@ public class ResourceWriter
             "Publishing date cannot be earlier than now!");
         resx.AddResource("EnEndDateIsEarlierThanNowExceptionMessage",
             "End date of notifications publishing cannot be earlier than now!");
-        resx.AddResource("EnMessageNotSupportedExceptionMessage",
-            "Message that you typed is not supported!");
 
 
         //Russian localisation
@@ -58,7 +56,5 @@ public class ResourceWriter
             "Дата публикации не может быть раньше текущего момента!");
         resx.AddResource("RuEndDateIsEarlierThanNowExceptionMessage",
             "Дата окончания публикации уведомлений не может быть раньше текущего момента!");
-        resx.AddResource("RuMessageNotSupportedExceptionMessage",
-            "Сообщение, которое вы ввели не поддерживается!");
     }
 }

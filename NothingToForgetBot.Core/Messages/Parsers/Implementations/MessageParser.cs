@@ -33,8 +33,6 @@ public class MessageParser : IMessageParser
             resourceReader.GetString(correctTypedLocalisation + "PublishingDateIsEarlierThanNowExceptionMessage");
         var endDateIsEarlierThanNowExceptionMessage =
             resourceReader.GetString(correctTypedLocalisation + "EndDateIsEarlierThanNowExceptionMessage");
-        var messageNotSupportedExceptionMessage =
-            resourceReader.GetString(correctTypedLocalisation + "MessageNotSupportedExceptionMessage");
 
         var messageScheduledInMinutesRegex = new Regex($".+\\s+{inResourceValue}\\s\\d+\\s+{minutesResourceValue}.+");
         var messageScheduledInSecondsRegex = new Regex($".+\\s+{inResourceValue}\\s\\d+\\s+{secondsResourceValue}.+");
@@ -179,6 +177,6 @@ public class MessageParser : IMessageParser
             };
         }
 
-        throw new MessageNotSupportedException(messageNotSupportedExceptionMessage);
+        throw new NotScheduledMessageException("Message is not scheduled!");
     }
 }
