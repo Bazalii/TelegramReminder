@@ -1,38 +1,35 @@
 ﻿using System.Resources.NetStandard;
 using System.Text.RegularExpressions;
 using NothingToForgetBot.Core.Exceptions;
+using NothingToForgetBot.Core.Messages.Models;
 
 namespace NothingToForgetBot.Core.Messages.Parsers.Implementations;
 
 public class MessageParser : IMessageParser
 {
-    private readonly string _resourcesFile;
+    private readonly ResXResourceReader _resourceReader;
 
-    public MessageParser(string resourcesFile)
+    public MessageParser(ResXResourceReader resourceReader)
     {
-        _resourcesFile = resourcesFile;
+        _resourceReader = resourceReader;
     }
 
     public Message Parse(string message, string localisation)
     {
-        var correctTypedLocalisation = localisation[0].ToString().ToUpper() + localisation[1..localisation.Length];
+        var timeSeparatorResourceValue = _resourceReader.GetString("TimeSeparator");
+        var dateSeparatorResourceValue = _resourceReader.GetString("DateSeparator");
 
-        var resourceReader = new ResXResourceReader(_resourcesFile);
-
-        var timeSeparatorResourceValue = resourceReader.GetString("TimeSeparator");
-        var dateSeparatorResourceValue = resourceReader.GetString("DateSeparator");
-
-        var inResourceValue = resourceReader.GetString(correctTypedLocalisation + "In");
-        var atResourceValue = resourceReader.GetString(correctTypedLocalisation + "At");
-        var everyResourceValue = resourceReader.GetString(correctTypedLocalisation + "Every");
-        var untilResourceValue = resourceReader.GetString(correctTypedLocalisation + "Until");
-        var minutesResourceValue = resourceReader.GetString(correctTypedLocalisation + "Minutes");
-        var secondsResourceValue = resourceReader.GetString(correctTypedLocalisation + "Seconds");
+        var inResourceValue = _resourceReader.GetString(localisation + "In");
+        var atResourceValue = _resourceReader.GetString(localisation + "At");
+        var everyResourceValue = _resourceReader.GetString(localisation + "Every");
+        var untilResourceValue = _resourceReader.GetString(localisation + "Until");
+        var minutesResourceValue = _resourceReader.GetString(localisation + "Minutes");
+        var secondsResourceValue = _resourceReader.GetString(localisation + "Seconds");
 
         var publishingDateIsEarlierThanNowExceptionMessage =
-            resourceReader.GetString(correctTypedLocalisation + "PublishingDateIsEarlierThanNowExceptionMessage");
+            _resourceReader.GetString(localisation + "PublishingDateIsEarlierThanNowExceptionMessage");
         var endDateIsEarlierThanNowExceptionMessage =
-            resourceReader.GetString(correctTypedLocalisation + "EndDateIsEarlierThanNowExceptionMessage");
+            _resourceReader.GetString(localisation + "EndDateIsEarlierThanNowExceptionMessage");
 
         var messageScheduledInMinutesRegex = new Regex($".+\\s+{inResourceValue}\\s\\d+\\s+{minutesResourceValue}.+");
         var messageScheduledInSecondsRegex = new Regex($".+\\s+{inResourceValue}\\s\\d+\\s+{secondsResourceValue}.+");

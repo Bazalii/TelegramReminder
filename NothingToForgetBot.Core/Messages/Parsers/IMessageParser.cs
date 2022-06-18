@@ -1,4 +1,6 @@
-﻿namespace NothingToForgetBot.Core.Messages.Parsers;
+﻿using NothingToForgetBot.Core.Messages.Models;
+
+namespace NothingToForgetBot.Core.Messages.Parsers;
 
 public interface IMessageParser
 {
