@@ -1,4 +1,4 @@
-﻿namespace NothingToForgetBot.Core.Notes;
+﻿namespace NothingToForgetBot.Core.Notes.Models;
 
 public class Note
 {
