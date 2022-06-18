@@ -5,28 +5,26 @@ namespace NothingToForgetBot.Core.Commands.Parsers.Implementations;
 
 public class CommandParser : ICommandParser
 {
-    private readonly string _resourcesFile;
+    private readonly ResXResourceReader _resourceReader;
 
-    public CommandParser(string resourcesFile)
+    public CommandParser(ResXResourceReader resourceReader)
     {
-        _resourcesFile = resourcesFile;
+        _resourceReader = resourceReader;
     }
 
     public Command Parse(string message)
     {
-        var resourceReader = new ResXResourceReader(_resourcesFile);
-
-        if (message == resourceReader.GetString("CommandGuide"))
+        if (message == _resourceReader.GetString("CommandGuide"))
         {
             return Command.Guide;
         }
 
-        if (message == resourceReader.GetString("CommandLanguage"))
+        if (message == _resourceReader.GetString("CommandLanguage"))
         {
             return Command.Language;
         }
 
-        if (message == resourceReader.GetString("CommandList"))
+        if (message == _resourceReader.GetString("CommandList"))
         {
             return Command.List;
         }
