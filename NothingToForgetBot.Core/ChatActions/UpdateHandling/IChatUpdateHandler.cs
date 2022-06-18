@@ -1,9 +1,9 @@
 ﻿using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace NothingToForgetBot.Core.ActionHandling;
+namespace NothingToForgetBot.Core.ChatActions.UpdateHandling;
 
-public interface IMessageHandler
+public interface IChatUpdateHandler
 {
     Task HandleChatUpdate(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken);
 
