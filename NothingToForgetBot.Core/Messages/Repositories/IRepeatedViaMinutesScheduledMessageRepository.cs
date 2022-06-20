@@ -4,13 +4,13 @@ namespace NothingToForgetBot.Core.Messages.Repositories;
 
 public interface IRepeatedViaMinutesScheduledMessageRepository
 {
-    Task Add(RepeatedViaSecondsScheduledMessage scheduledMessage);
+    Task Add(RepeatedViaMinutesScheduledMessage scheduledMessage, CancellationToken cancellationToken);
 
-    Task<RepeatedViaSecondsScheduledMessage> GetById(Guid id);
+    Task<RepeatedViaMinutesScheduledMessage> GetById(Guid id, CancellationToken cancellationToken);
     
-    Task<List<RepeatedViaSecondsScheduledMessage>> GetAllByChatId(long chatId);
+    Task<List<RepeatedViaMinutesScheduledMessage>> GetAllByChatId(long chatId, CancellationToken cancellationToken);
     
-    Task Update(RepeatedViaSecondsScheduledMessage scheduledMessage);
+    Task Update(RepeatedViaMinutesScheduledMessage scheduledMessage, CancellationToken cancellationToken);
     
-    Task Remove(Guid id);
+    Task Remove(Guid id, CancellationToken cancellationToken);
 }

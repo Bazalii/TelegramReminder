@@ -64,7 +64,7 @@ public class ChatUpdateHandler : IChatUpdateHandler
         {
             currentLanguage = currentLanguage[0].ToString().ToUpper() + currentLanguage[1..currentLanguage.Length];
 
-            var supportedLanguages = await _supportedLanguagesRepository.GetAll();
+            var supportedLanguages = await _supportedLanguagesRepository.GetAll(cancellationToken);
 
             if (!supportedLanguages.Contains(currentLanguage))
             {
@@ -76,7 +76,7 @@ public class ChatUpdateHandler : IChatUpdateHandler
 
         if (command != Command.NotCommand)
         {
-            await Task.Run(() => RespondOnCommand(command, chatId), cancellationToken);
+            await Task.Run(() => RespondOnCommand(command, chatId, cancellationToken), cancellationToken);
             return;
         }
 
@@ -88,7 +88,7 @@ public class ChatUpdateHandler : IChatUpdateHandler
             message.Id = Guid.NewGuid();
             message.ChatId = chatId;
 
-            await RespondOnScheduledMessage(message);
+            await RespondOnScheduledMessage(message, cancellationToken);
         }
         catch (NotScheduledMessageException notScheduledMessageException)
         {
@@ -99,7 +99,7 @@ public class ChatUpdateHandler : IChatUpdateHandler
                 Content = messageText
             };
 
-            await RespondOnNote(note);
+            await RespondOnNote(note, cancellationToken);
         }
     }
 
@@ -116,18 +116,18 @@ public class ChatUpdateHandler : IChatUpdateHandler
         return Task.Run(() => Console.WriteLine(errorMessage), cancellationToken);
     }
 
-    private Task RespondOnCommand(Command command, long chatId)
+    private Task RespondOnCommand(Command command, long chatId, CancellationToken cancellationToken)
     {
-        return _commandHandler.Handle(command, chatId);
+        return _commandHandler.Handle(command, chatId, cancellationToken);
     }
 
-    private Task RespondOnScheduledMessage(Message message)
+    private Task RespondOnScheduledMessage(Message message, CancellationToken cancellationToken)
     {
-        return _scheduledMessageHandler.Handle(message);
+        return _scheduledMessageHandler.Handle(message, cancellationToken);
     }
 
-    private Task RespondOnNote(Note note)
+    private Task RespondOnNote(Note note, CancellationToken cancellationToken)
     {
-        return _noteHandler.Handle(note);
+        return _noteHandler.Handle(note, cancellationToken);
     }
 }

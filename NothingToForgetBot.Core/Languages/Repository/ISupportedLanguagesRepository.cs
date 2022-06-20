@@ -2,9 +2,9 @@
 
 public interface ISupportedLanguagesRepository
 {
-    Task Add(string language);
+    Task Add(string language, CancellationToken cancellationToken);
     
-    Task<List<string>> GetAll();
+    Task<List<string>> GetAll(CancellationToken cancellationToken);
 
-    Task Remove(string language);
+    Task Remove(string language, CancellationToken cancellationToken);
 }

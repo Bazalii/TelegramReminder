@@ -4,5 +4,5 @@ namespace NothingToForgetBot.Core.Messages.Handlers;
 
 public interface IScheduledMessageHandler
 {
-    Task Handle(Message message);
+    Task Handle(Message message, CancellationToken cancellationToken);
 }

@@ -2,11 +2,11 @@
 
 public interface IChatLanguageRepository
 {
-    Task Add(ChatWithLanguage chatWithLanguage);
+    Task Add(ChatWithLanguage chatWithLanguage, CancellationToken cancellationToken);
 
-    Task<string> GetLanguageByChatId(long chatId);
+    Task<string> GetLanguageByChatId(long chatId, CancellationToken cancellationToken);
     
-    Task Update(ChatWithLanguage chatWithLanguage);
+    Task Update(ChatWithLanguage chatWithLanguage, CancellationToken cancellationToken);
     
-    Task RemoveByChatId(long chatId);
+    Task RemoveByChatId(long chatId, CancellationToken cancellationToken);
 }
