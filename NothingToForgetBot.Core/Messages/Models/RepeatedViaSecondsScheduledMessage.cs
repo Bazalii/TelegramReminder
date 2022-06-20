@@ -1,8 +1,5 @@
 ﻿namespace NothingToForgetBot.Core.Messages.Models;
 
-public class RepeatedViaSecondsScheduledMessage : Message
+public class RepeatedViaSecondsScheduledMessage : RepeatedMessage
 {
-    public int Interval { get; set; }
-
-    public DateTime EndDate { get; set; }
 }
