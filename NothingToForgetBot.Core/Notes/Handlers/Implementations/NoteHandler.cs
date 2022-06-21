@@ -12,8 +12,8 @@ public class NoteHandler : INoteHandler
         _noteRepository = noteRepository;
     }
     
-    public Task Handle(Note note)
+    public Task Handle(Note note, CancellationToken cancellationToken)
     {
-        return _noteRepository.Add(note);
+        return _noteRepository.Add(note, cancellationToken);
     }
 }
