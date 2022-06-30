@@ -52,9 +52,11 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
 
         var timer = new Timer(interval);
 
-        timer.Elapsed += (_, _) =>
+        timer.Elapsed += async (_, _) =>
         {
-            _messageSender.SendMessageToChat(scheduledMessage.ChatId, scheduledMessage.Content, cancellationToken);
+            await _messageSender.SendMessageToChat(scheduledMessage.ChatId, scheduledMessage.Content, cancellationToken);
+
+            await _scheduledMessageRepository.Remove(scheduledMessage.Id, cancellationToken);
 
             timer.Close();
         };
@@ -92,18 +94,30 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
     {
         var repeatedTimer = new Timer(repeatedTimerInterval);
 
-        repeatedTimer.Elapsed += (_, _) =>
+        repeatedTimer.Elapsed += async (_, _) =>
         {
-            _messageSender.SendMessageToChat(message.ChatId, message.Content, cancellationToken);
+            await _messageSender.SendMessageToChat(message.ChatId, message.Content, cancellationToken);
         };
 
         repeatedTimer.AutoReset = true;
 
         var endTimer = new Timer(endTimerInterval);
 
-        repeatedTimer.Elapsed += (_, _) =>
+        endTimer.Elapsed += async (_, _) =>
         {
-            _messageSender.SendMessageToChat(message.ChatId, message.Content, cancellationToken);
+            await _messageSender.SendMessageToChat(message.ChatId, message.Content, cancellationToken);
+
+            switch (message)
+            {
+                case RepeatedViaMinutesScheduledMessage repeatedViaMinutesScheduledMessage:
+                    await _repeatedViaMinutesScheduledMessageRepository.Remove(repeatedViaMinutesScheduledMessage.Id,
+                        cancellationToken);
+                    break;
+                case RepeatedViaSecondsScheduledMessage repeatedViaSecondsScheduledMessage:
+                    await _repeatedViaSecondsScheduledMessageRepository.Remove(repeatedViaSecondsScheduledMessage.Id,
+                        cancellationToken);
+                    break;
+            }
 
             repeatedTimer.Close();
 
