@@ -69,6 +69,11 @@ public class CommandHandler : ICommandHandler
 
         var counter = 0;
 
+        userRecords.ScheduledMessages.Sort((x, y) => x.PublishingDate.CompareTo(y.PublishingDate));
+        userRecords.RepeatedViaMinutesScheduledMessages.Sort((x, y) => x.EndDate.CompareTo(y.EndDate));
+        userRecords.RepeatedViaSecondsScheduledMessages.Sort((x, y) => x.EndDate.CompareTo(y.EndDate));
+        userRecords.Notes.Sort((x, y) => string.Compare(x.Content, y.Content, StringComparison.Ordinal));
+
         foreach (var scheduledMessage in userRecords.ScheduledMessages)
         {
             message += $"{counter}) {scheduledMessage.ToString()}\n";
