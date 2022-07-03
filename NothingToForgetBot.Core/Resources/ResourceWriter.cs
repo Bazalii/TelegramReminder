@@ -12,6 +12,7 @@ public class ResourceWriter
         resx.AddResource("CommandGuide", "/guide");
         resx.AddResource("CommandLanguage", "/language");
         resx.AddResource("CommandList", "/list");
+        resx.AddResource("CommandDelete", "/delete");
 
         //Separators
         resx.AddResource("TimeSeparator", ":");
