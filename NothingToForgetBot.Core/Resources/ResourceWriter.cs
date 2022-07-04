@@ -18,6 +18,11 @@ public class ResourceWriter
         resx.AddResource("TimeSeparator", ":");
         resx.AddResource("DateSeparator", ".");
 
+        //Sections
+        resx.AddResource("ScheduledMessagesSection", "I");
+        resx.AddResource("RepeatedViaMinutesMessagesSection", "II");
+        resx.AddResource("RepeatedViaSecondsMessagesSection", "III");
+        resx.AddResource("NotesSection", "IV");
 
         //English localisation
 
@@ -38,6 +43,11 @@ public class ResourceWriter
         resx.AddResource("EnEndDateIsEarlierThanNowExceptionMessage",
             "End date of notifications publishing cannot be earlier than now!");
 
+        //Object names
+        resx.AddResource("EnScheduledMessages", "Scheduled notifications");
+        resx.AddResource("EnRepeatedViaMinutesMessages", "Repeated via minutes notifications");
+        resx.AddResource("EnRepeatedViaSecondsMessages", "Repeated via seconds notifications");
+        resx.AddResource("EnNotes", "Notes");
 
         //Russian localisation
 
@@ -57,5 +67,11 @@ public class ResourceWriter
             "Дата публикации не может быть раньше текущего момента!");
         resx.AddResource("RuEndDateIsEarlierThanNowExceptionMessage",
             "Дата окончания публикации уведомлений не может быть раньше текущего момента!");
+        
+        //Object names
+        resx.AddResource("RuScheduledMessages", "Отложенные уведомления");
+        resx.AddResource("RuRepeatedViaMinutesMessages", "Повторяемые через секунды уведомления");
+        resx.AddResource("RuRepeatedViaSecondsMessages", "Повторяемые через минуты уведомления");
+        resx.AddResource("RuNotes", "Заметки");
     }
 }
