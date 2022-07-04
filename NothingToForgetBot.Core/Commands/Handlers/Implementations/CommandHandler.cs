@@ -25,7 +25,7 @@ public class CommandHandler : ICommandHandler
         _userRecordSelector = userRecordSelector;
     }
 
-    public async Task Handle(Command command, long chatId, CancellationToken cancellationToken)
+    public async Task Handle(Command command, long chatId, string localisation, CancellationToken cancellationToken)
     {
         switch (command)
         {
@@ -36,7 +36,7 @@ public class CommandHandler : ICommandHandler
                 await RespondOnLanguageCommand(chatId, cancellationToken);
                 break;
             case Command.List:
-                await RespondOnListCommand(chatId, cancellationToken);
+                await RespondOnListCommand(chatId, localisation, cancellationToken);
                 break;
         }
     }
@@ -59,7 +59,7 @@ public class CommandHandler : ICommandHandler
         await _messageSender.SendMessageToChat(chatId, message, cancellationToken);
     }
 
-    private async Task RespondOnListCommand(long chatId, CancellationToken cancellationToken)
+    private async Task RespondOnListCommand(long chatId, string localisation, CancellationToken cancellationToken)
     {
         var userRecords = await _userRecordSelector.Select(chatId, cancellationToken);
 
@@ -67,17 +67,16 @@ public class CommandHandler : ICommandHandler
 
         var message = string.Empty;
 
-        var counter = 0;
-
         userRecords.ScheduledMessages.Sort((x, y) => x.PublishingDate.CompareTo(y.PublishingDate));
-        userRecords.RepeatedViaMinutesScheduledMessages.Sort((x, y) => x.EndDate.CompareTo(y.EndDate));
-        userRecords.RepeatedViaSecondsScheduledMessages.Sort((x, y) => x.EndDate.CompareTo(y.EndDate));
-        userRecords.Notes.Sort((x, y) => string.Compare(x.Content, y.Content, StringComparison.Ordinal));
 
-        foreach (var scheduledMessage in userRecords.ScheduledMessages)
+        var scheduledMessagesSectionResourceValue = _resourceReader.GetString("ScheduledMessagesSection");
+        var scheduledMessagesResourceValue = _resourceReader.GetString(localisation + "ScheduledMessages");
+
+        message += $"{scheduledMessagesSectionResourceValue}. {scheduledMessagesResourceValue}\n";
+
+        for (var i = 0; i < userRecords.ScheduledMessages.Count; i++)
         {
-            message += $"{counter}) {scheduledMessage.ToString()}\n";
-            counter++;
+            message += $"{i + 1}) {userRecords.ScheduledMessages[i].ToString()}\n";
         }
 
         var every = _resourceReader.GetString(currentLanguage + "Every");
@@ -85,22 +84,46 @@ public class CommandHandler : ICommandHandler
         var minutes = _resourceReader.GetString(currentLanguage + "Minutes");
         var seconds = _resourceReader.GetString(currentLanguage + "Seconds");
 
-        foreach (var scheduledMessage in userRecords.RepeatedViaMinutesScheduledMessages)
+        var repeatedViaMinutesMessagesSectionResourceValue =
+            _resourceReader.GetString("RepeatedViaMinutesMessagesSection");
+        var repeatedViaMinutesMessagesResourceValue =
+            _resourceReader.GetString(localisation + "RepeatedViaMinutesMessages");
+
+        message += $"{repeatedViaMinutesMessagesSectionResourceValue}. {repeatedViaMinutesMessagesResourceValue}\n";
+
+        userRecords.RepeatedViaMinutesScheduledMessages.Sort((x, y) => x.EndDate.CompareTo(y.EndDate));
+
+        for (var i = 0; i < userRecords.RepeatedViaMinutesScheduledMessages.Count; i++)
         {
-            message += $"{counter}) {scheduledMessage.ToString(every, minutes, until)}\n";
-            counter++;
+            message +=
+                $"{i + 1}) {userRecords.RepeatedViaMinutesScheduledMessages[i].ToString(every, minutes, until)}\n";
         }
 
-        foreach (var scheduledMessage in userRecords.RepeatedViaSecondsScheduledMessages)
+        var repeatedViaSecondsMessagesSectionResourceValue =
+            _resourceReader.GetString("RepeatedViaSecondsMessagesSection");
+        var repeatedViaSecondsMessagesResourceValue =
+            _resourceReader.GetString(localisation + "RepeatedViaSecondsMessages");
+
+        message += $"{repeatedViaSecondsMessagesSectionResourceValue}. {repeatedViaSecondsMessagesResourceValue}\n";
+
+        userRecords.RepeatedViaSecondsScheduledMessages.Sort((x, y) => x.EndDate.CompareTo(y.EndDate));
+
+        for (var i = 0; i < userRecords.RepeatedViaSecondsScheduledMessages.Count; i++)
         {
-            message += $"{counter}) {scheduledMessage.ToString(every, seconds, until)}\n";
-            counter++;
+            message +=
+                $"{i + 1}) {userRecords.RepeatedViaSecondsScheduledMessages[i].ToString(every, seconds, until)}\n";
         }
 
-        foreach (var note in userRecords.Notes)
+        var notesSectionResourceValue = _resourceReader.GetString("NotesSection");
+        var notesResourceValue = _resourceReader.GetString(localisation + "Notes");
+
+        message += $"{notesSectionResourceValue}. {notesResourceValue}\n";
+
+        userRecords.Notes.Sort((x, y) => string.Compare(x.Content, y.Content, StringComparison.Ordinal));
+
+        for (var i = 0; i < userRecords.Notes.Count; i++)
         {
-            message += $"{counter}) {note.ToString()}\n";
-            counter++;
+            message += $"{i + 1}) {userRecords.Notes[i].ToString()}\n";
         }
 
         await _messageSender.SendMessageToChat(chatId, message, cancellationToken);
