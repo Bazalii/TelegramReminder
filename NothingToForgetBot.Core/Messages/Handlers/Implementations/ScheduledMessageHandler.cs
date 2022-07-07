@@ -1,6 +1,8 @@
 ﻿using NothingToForgetBot.Core.ChatActions.ChatResponse.MessageResponse;
 using NothingToForgetBot.Core.Messages.Models;
 using NothingToForgetBot.Core.Messages.Repositories;
+using NothingToForgetBot.Core.Timers;
+using NothingToForgetBot.Core.Timers.Models;
 using Message = NothingToForgetBot.Core.Messages.Models.Message;
 using Timer = System.Timers.Timer;
 
@@ -16,16 +18,18 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
 
     private readonly IMessageSender _messageSender;
 
+    private readonly ITimerHandler _timerHandler;
 
     public ScheduledMessageHandler(IScheduledMessageRepository scheduledMessageRepository,
         IRepeatedViaMinutesScheduledMessageRepository repeatedViaMinutesScheduledMessageRepository,
         IRepeatedViaSecondsScheduledMessageRepository repeatedViaSecondsScheduledMessageRepository,
-        IMessageSender messageSender)
+        IMessageSender messageSender, ITimerHandler timerHandler)
     {
         _scheduledMessageRepository = scheduledMessageRepository;
         _repeatedViaMinutesScheduledMessageRepository = repeatedViaMinutesScheduledMessageRepository;
         _repeatedViaSecondsScheduledMessageRepository = repeatedViaSecondsScheduledMessageRepository;
         _messageSender = messageSender;
+        _timerHandler = timerHandler;
     }
 
     public async Task Handle(Message message, CancellationToken cancellationToken)
@@ -54,7 +58,8 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
 
         timer.Elapsed += async (_, _) =>
         {
-            await _messageSender.SendMessageToChat(scheduledMessage.ChatId, scheduledMessage.Content, cancellationToken);
+            await _messageSender.SendMessageToChat(scheduledMessage.ChatId, scheduledMessage.Content,
+                cancellationToken);
 
             await _scheduledMessageRepository.Remove(scheduledMessage.Id, cancellationToken);
 
@@ -63,6 +68,8 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
 
         timer.AutoReset = false;
         timer.Enabled = true;
+
+        await _timerHandler.Add(scheduledMessage.Id, timer);
     }
 
     private async Task HandleRepeatedViaMinutesScheduledMessage(RepeatedViaMinutesScheduledMessage scheduledMessage,
@@ -73,7 +80,7 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
         var repeatedTimerInterval = scheduledMessage.Interval * 60000;
 
         var endTimerInterval = CalculateEndTimerInterval(scheduledMessage);
-        
+
         await HandleRepeatedMessage(scheduledMessage, repeatedTimerInterval, endTimerInterval, cancellationToken);
     }
 
@@ -89,14 +96,16 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
         await HandleRepeatedMessage(scheduledMessage, repeatedTimerInterval, endTimerInterval, cancellationToken);
     }
 
-    private Task HandleRepeatedMessage(Message message, int repeatedTimerInterval, double endTimerInterval,
+    private async Task HandleRepeatedMessage(RepeatedMessage repeatedMessage, int repeatedTimerInterval,
+        double endTimerInterval,
         CancellationToken cancellationToken)
     {
         var repeatedTimer = new Timer(repeatedTimerInterval);
 
         repeatedTimer.Elapsed += async (_, _) =>
         {
-            await _messageSender.SendMessageToChat(message.ChatId, message.Content, cancellationToken);
+            await _messageSender.SendMessageToChat(repeatedMessage.ChatId, repeatedMessage.Content,
+                cancellationToken);
         };
 
         repeatedTimer.AutoReset = true;
@@ -105,9 +114,9 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
 
         endTimer.Elapsed += async (_, _) =>
         {
-            await _messageSender.SendMessageToChat(message.ChatId, message.Content, cancellationToken);
+            await _messageSender.SendMessageToChat(repeatedMessage.ChatId, repeatedMessage.Content, cancellationToken);
 
-            switch (message)
+            switch (repeatedMessage)
             {
                 case RepeatedViaMinutesScheduledMessage repeatedViaMinutesScheduledMessage:
                     await _repeatedViaMinutesScheduledMessageRepository.Remove(repeatedViaMinutesScheduledMessage.Id,
@@ -128,8 +137,14 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
 
         repeatedTimer.Enabled = true;
         endTimer.Enabled = true;
-        
-        return Task.CompletedTask;
+
+        var repeatedMessageTimers = new RepeatedMessageTimers
+        {
+            RepeatedTimer = repeatedTimer,
+            EndTimer = endTimer
+        };
+
+        await _timerHandler.Add(repeatedMessage.Id, repeatedMessageTimers);
     }
 
     private double CalculateEndTimerInterval(RepeatedMessage message)
