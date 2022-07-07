@@ -3,7 +3,7 @@ using NothingToForgetBot.Core.Messages.Repositories;
 using NothingToForgetBot.Core.Timers.Models;
 using Timer = System.Timers.Timer;
 
-namespace NothingToForgetBot.Core.Timers.Implementations;
+namespace NothingToForgetBot.Core.Timers.Handlers.Implementations;
 
 public class TimerHandler : ITimerHandler
 {
