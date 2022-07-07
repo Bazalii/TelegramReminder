@@ -67,8 +67,6 @@ public class CommandHandler : ICommandHandler
 
         var message = string.Empty;
 
-        userRecords.ScheduledMessages.Sort((x, y) => x.PublishingDate.CompareTo(y.PublishingDate));
-
         var scheduledMessagesSectionResourceValue = _resourceReader.GetString("ScheduledMessagesSection");
         var scheduledMessagesResourceValue = _resourceReader.GetString(localisation + "ScheduledMessages");
 
@@ -91,8 +89,6 @@ public class CommandHandler : ICommandHandler
 
         message += $"{repeatedViaMinutesMessagesSectionResourceValue}. {repeatedViaMinutesMessagesResourceValue}\n";
 
-        userRecords.RepeatedViaMinutesScheduledMessages.Sort((x, y) => x.EndDate.CompareTo(y.EndDate));
-
         for (var i = 0; i < userRecords.RepeatedViaMinutesScheduledMessages.Count; i++)
         {
             message +=
@@ -106,8 +102,6 @@ public class CommandHandler : ICommandHandler
 
         message += $"{repeatedViaSecondsMessagesSectionResourceValue}. {repeatedViaSecondsMessagesResourceValue}\n";
 
-        userRecords.RepeatedViaSecondsScheduledMessages.Sort((x, y) => x.EndDate.CompareTo(y.EndDate));
-
         for (var i = 0; i < userRecords.RepeatedViaSecondsScheduledMessages.Count; i++)
         {
             message +=
@@ -118,8 +112,6 @@ public class CommandHandler : ICommandHandler
         var notesResourceValue = _resourceReader.GetString(localisation + "Notes");
 
         message += $"{notesSectionResourceValue}. {notesResourceValue}\n";
-
-        userRecords.Notes.Sort((x, y) => string.Compare(x.Content, y.Content, StringComparison.Ordinal));
 
         for (var i = 0; i < userRecords.Notes.Count; i++)
         {

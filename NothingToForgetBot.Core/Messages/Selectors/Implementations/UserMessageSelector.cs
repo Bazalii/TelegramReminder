@@ -30,6 +30,12 @@ public class UserMessageSelector : IUserMessageSelector
         var repeatedViaSecondsMessages =
             await _repeatedViaSecondsScheduledMessageRepository.GetAllByChatId(chatId, cancellationToken);
 
+        scheduledMessages.Sort((x, y) => x.PublishingDate.CompareTo(y.PublishingDate));
+
+        repeatedViaMinutesMessages.Sort((x, y) => x.EndDate.CompareTo(y.EndDate));
+
+        repeatedViaSecondsMessages.Sort((x, y) => x.EndDate.CompareTo(y.EndDate));
+
         return new UserMessages
         {
             ScheduledMessages = scheduledMessages,

@@ -12,8 +12,12 @@ public class UserNoteSelector : IUserNoteSelector
         _noteRepository = noteRepository;
     }
 
-    public Task<List<Note>> Select(long chatId, CancellationToken cancellationToken)
+    public async Task<List<Note>> Select(long chatId, CancellationToken cancellationToken)
     {
-        return _noteRepository.GetAllByChatId(chatId, cancellationToken);
+        var notes = await _noteRepository.GetAllByChatId(chatId, cancellationToken);
+        
+        notes.Sort((x, y) => string.Compare(x.Content, y.Content, StringComparison.Ordinal));
+        
+        return notes;
     }
 }
