@@ -1,10 +1,10 @@
 ﻿using NothingToForgetBot.Core.Commands.Handlers;
-using NothingToForgetBot.Core.Commands.Parsers.Implementations;
+using NothingToForgetBot.Core.Commands.Parsers;
 using NothingToForgetBot.Core.Enums;
 using NothingToForgetBot.Core.Exceptions;
 using NothingToForgetBot.Core.Languages.Repository;
 using NothingToForgetBot.Core.Messages.Handlers;
-using NothingToForgetBot.Core.Messages.Parsers.Implementations;
+using NothingToForgetBot.Core.Messages.Parsers;
 using NothingToForgetBot.Core.Notes.Handlers;
 using NothingToForgetBot.Core.Notes.Models;
 using Telegram.Bot;
@@ -17,28 +17,39 @@ namespace NothingToForgetBot.Core.ChatActions.UpdateHandling.Implementations;
 
 public class ChatUpdateHandler : IChatUpdateHandler
 {
-    private readonly CommandParser _commandParser;
+    private readonly ICommandParser _commandParser;
 
-    private readonly MessageParser _messageParser;
+    private readonly ICommandWithArgumentsParser _commandWithArgumentsParser;
+
+    private readonly IMessageParser _messageParser;
 
     private readonly ISupportedLanguagesRepository _supportedLanguagesRepository;
 
     private readonly ICommandHandler _commandHandler;
 
+    private readonly ICommandWithArgumentsHandler _commandWithArgumentsHandler;
+
     private readonly INoteHandler _noteHandler;
 
     private readonly IScheduledMessageHandler _scheduledMessageHandler;
 
-    public ChatUpdateHandler(CommandParser commandParser, MessageParser messageParser,
-        ISupportedLanguagesRepository supportedLanguagesRepository, ICommandHandler commandHandler,
-        INoteHandler noteHandler, IScheduledMessageHandler scheduledMessageHandler)
+    private readonly IChatLanguageRepository _chatLanguageRepository;
+
+    public ChatUpdateHandler(ICommandParser commandParser, ICommandWithArgumentsParser commandWithArgumentsParser,
+        IMessageParser messageParser, ISupportedLanguagesRepository supportedLanguagesRepository,
+        ICommandHandler commandHandler, ICommandWithArgumentsHandler commandWithArgumentsHandler,
+        INoteHandler noteHandler, IScheduledMessageHandler scheduledMessageHandler,
+        IChatLanguageRepository chatLanguageRepository)
     {
         _commandParser = commandParser;
+        _commandWithArgumentsParser = commandWithArgumentsParser;
         _messageParser = messageParser;
         _supportedLanguagesRepository = supportedLanguagesRepository;
         _commandHandler = commandHandler;
+        _commandWithArgumentsHandler = commandWithArgumentsHandler;
         _noteHandler = noteHandler;
         _scheduledMessageHandler = scheduledMessageHandler;
+        _chatLanguageRepository = chatLanguageRepository;
     }
 
     public async Task HandleChatUpdate(ITelegramBotClient botClient, Update update,
@@ -53,30 +64,26 @@ public class ChatUpdateHandler : IChatUpdateHandler
         var messageText = update.Message.Text ??
                           throw new NullMessageTextValueException("Message text cannot be null!");
 
-        var user = await botClient.GetMeAsync(cancellationToken: cancellationToken);
-        var currentLanguage = user.LanguageCode;
-
-        if (currentLanguage == null)
-        {
-            currentLanguage = "En";
-        }
-        else
-        {
-            currentLanguage = currentLanguage[0].ToString().ToUpper() + currentLanguage[1..currentLanguage.Length];
-
-            var supportedLanguages = await _supportedLanguagesRepository.GetAll(cancellationToken);
-
-            if (!supportedLanguages.Contains(currentLanguage))
-            {
-                currentLanguage = "En";
-            }
-        }
+        var currentLanguage = await _chatLanguageRepository.GetLanguageByChatId(chatId, cancellationToken);
 
         var command = await Task.Run(() => _commandParser.Parse(messageText), cancellationToken);
 
         if (command != Command.NotCommand)
         {
-            await Task.Run(() => RespondOnCommand(command, chatId, cancellationToken), cancellationToken);
+            await Task.Run(() => RespondOnCommand(command, chatId, currentLanguage, cancellationToken),
+                cancellationToken);
+            return;
+        }
+
+        var commandWithArguments =
+            await Task.Run(() => _commandWithArgumentsParser.Parse(messageText), cancellationToken);
+
+        if (commandWithArguments != CommandWithArguments.NotCommandWithArguments)
+        {
+            await Task.Run(
+                () => RespondOnCommandWithArguments(commandWithArguments, chatId, currentLanguage, messageText,
+                    cancellationToken),
+                cancellationToken);
             return;
         }
 
@@ -116,9 +123,16 @@ public class ChatUpdateHandler : IChatUpdateHandler
         return Task.Run(() => Console.WriteLine(errorMessage), cancellationToken);
     }
 
-    private Task RespondOnCommand(Command command, long chatId, CancellationToken cancellationToken)
+    private Task RespondOnCommand(Command command, long chatId, string localisation,
+        CancellationToken cancellationToken)
     {
-        return _commandHandler.Handle(command, chatId, cancellationToken);
+        return _commandHandler.Handle(command, chatId, localisation, cancellationToken);
+    }
+
+    private Task RespondOnCommandWithArguments(CommandWithArguments command, long chatId, string localisation,
+        string message, CancellationToken cancellationToken)
+    {
+        return _commandWithArgumentsHandler.Handle(command, chatId, localisation, message, cancellationToken);
     }
 
     private Task RespondOnScheduledMessage(Message message, CancellationToken cancellationToken)
