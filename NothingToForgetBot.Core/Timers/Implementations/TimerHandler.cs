@@ -17,13 +17,16 @@ public class TimerHandler : ITimerHandler
 
     private readonly IRepeatedViaSecondsScheduledMessageRepository _repeatedViaSecondsMessageRepository;
 
+    private readonly IUnitOfWork _unitOfWork;
+
     public TimerHandler(IScheduledMessageRepository scheduledMessageRepository,
         IRepeatedViaMinutesScheduledMessageRepository repeatedViaMinutesMessageRepository,
-        IRepeatedViaSecondsScheduledMessageRepository repeatedViaSecondsMessageRepository)
+        IRepeatedViaSecondsScheduledMessageRepository repeatedViaSecondsMessageRepository, IUnitOfWork unitOfWork)
     {
         _scheduledMessageRepository = scheduledMessageRepository;
         _repeatedViaMinutesMessageRepository = repeatedViaMinutesMessageRepository;
         _repeatedViaSecondsMessageRepository = repeatedViaSecondsMessageRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public Task Add(Guid id, Timer timer)
@@ -51,6 +54,8 @@ public class TimerHandler : ITimerHandler
 
         await _scheduledMessageRepository.Remove(id, cancellationToken);
 
+        await _unitOfWork.SaveChanges(cancellationToken);
+
         _scheduledMessageTimers.Remove(id);
     }
 
@@ -62,10 +67,12 @@ public class TimerHandler : ITimerHandler
         }
 
         await _repeatedViaMinutesMessageRepository.Remove(id, cancellationToken);
-        
+
+        await _unitOfWork.SaveChanges(cancellationToken);
+
         DeleteRepeatedMessageTimer(id);
     }
-    
+
     public async Task RemoveRepeatedViaSecondsMessageTimers(Guid id, CancellationToken cancellationToken)
     {
         if (!_repeatedMessageTimers.ContainsKey(id))
@@ -74,7 +81,9 @@ public class TimerHandler : ITimerHandler
         }
 
         await _repeatedViaSecondsMessageRepository.Remove(id, cancellationToken);
-        
+
+        await _unitOfWork.SaveChanges(cancellationToken);
+
         DeleteRepeatedMessageTimer(id);
     }
 

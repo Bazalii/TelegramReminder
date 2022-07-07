@@ -20,14 +20,18 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
 
     private readonly IMessageSender _messageSender;
 
+    private readonly IUnitOfWork _unitOfWork;
+
     public CommandWithArgumentsHandler(ITimerHandler timerHandler, INoteRepository noteRepository,
-        ResXResourceReader resourceReader, IUserRecordSelector userRecordSelector, IMessageSender messageSender)
+        ResXResourceReader resourceReader, IUserRecordSelector userRecordSelector, IMessageSender messageSender,
+        IUnitOfWork unitOfWork)
     {
         _timerHandler = timerHandler;
         _noteRepository = noteRepository;
         _resourceReader = resourceReader;
         _userRecordSelector = userRecordSelector;
         _messageSender = messageSender;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task Handle(CommandWithArguments command, long chatId, string localisation, string message,
@@ -113,7 +117,7 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
                     userRecords.RepeatedViaSecondsScheduledMessages[messageNumber].Id,
                     cancellationToken);
             }
-        }   
+        }
 
         if (noteDeletionRegex.IsMatch(message))
         {
@@ -128,6 +132,8 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
             else
             {
                 await _noteRepository.Remove(userRecords.Notes[messageNumber].Id, cancellationToken);
+
+                await _unitOfWork.SaveChanges(cancellationToken);
             }
         }
     }

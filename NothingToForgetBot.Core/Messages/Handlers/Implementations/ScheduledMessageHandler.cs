@@ -20,16 +20,19 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
 
     private readonly ITimerHandler _timerHandler;
 
+    private readonly IUnitOfWork _unitOfWork;
+
     public ScheduledMessageHandler(IScheduledMessageRepository scheduledMessageRepository,
         IRepeatedViaMinutesScheduledMessageRepository repeatedViaMinutesScheduledMessageRepository,
         IRepeatedViaSecondsScheduledMessageRepository repeatedViaSecondsScheduledMessageRepository,
-        IMessageSender messageSender, ITimerHandler timerHandler)
+        IMessageSender messageSender, ITimerHandler timerHandler, IUnitOfWork unitOfWork)
     {
         _scheduledMessageRepository = scheduledMessageRepository;
         _repeatedViaMinutesScheduledMessageRepository = repeatedViaMinutesScheduledMessageRepository;
         _repeatedViaSecondsScheduledMessageRepository = repeatedViaSecondsScheduledMessageRepository;
         _messageSender = messageSender;
         _timerHandler = timerHandler;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task Handle(Message message, CancellationToken cancellationToken)
@@ -52,6 +55,8 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
     {
         await _scheduledMessageRepository.Add(scheduledMessage, cancellationToken);
 
+        await _unitOfWork.SaveChanges(cancellationToken);
+
         var interval = (scheduledMessage.PublishingDate - DateTime.Now).TotalMilliseconds;
 
         var timer = new Timer(interval);
@@ -62,6 +67,8 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
                 cancellationToken);
 
             await _scheduledMessageRepository.Remove(scheduledMessage.Id, cancellationToken);
+
+            await _unitOfWork.SaveChanges(cancellationToken);
 
             timer.Close();
         };
@@ -77,6 +84,8 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
     {
         await _repeatedViaMinutesScheduledMessageRepository.Add(scheduledMessage, cancellationToken);
 
+        await _unitOfWork.SaveChanges(cancellationToken);
+
         var repeatedTimerInterval = scheduledMessage.Interval * 60000;
 
         var endTimerInterval = CalculateEndTimerInterval(scheduledMessage);
@@ -88,6 +97,8 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
         CancellationToken cancellationToken)
     {
         await _repeatedViaSecondsScheduledMessageRepository.Add(scheduledMessage, cancellationToken);
+
+        await _unitOfWork.SaveChanges(cancellationToken);
 
         var repeatedTimerInterval = scheduledMessage.Interval * 1000;
 
@@ -127,6 +138,8 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
                         cancellationToken);
                     break;
             }
+
+            await _unitOfWork.SaveChanges(cancellationToken);
 
             repeatedTimer.Close();
 

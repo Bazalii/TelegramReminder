@@ -7,13 +7,18 @@ public class NoteHandler : INoteHandler
 {
     private readonly INoteRepository _noteRepository;
 
-    public NoteHandler(INoteRepository noteRepository)
+    private readonly IUnitOfWork _unitOfWork;
+
+    public NoteHandler(INoteRepository noteRepository, IUnitOfWork unitOfWork)
     {
         _noteRepository = noteRepository;
+        _unitOfWork = unitOfWork;
     }
-    
-    public Task Handle(Note note, CancellationToken cancellationToken)
+
+    public async Task Handle(Note note, CancellationToken cancellationToken)
     {
-        return _noteRepository.Add(note, cancellationToken);
+        await _noteRepository.Add(note, cancellationToken);
+
+        await _unitOfWork.SaveChanges(cancellationToken);
     }
 }
