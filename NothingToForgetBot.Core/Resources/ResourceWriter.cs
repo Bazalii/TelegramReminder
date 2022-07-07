@@ -37,11 +37,13 @@ public class ResourceWriter
         resx.AddResource("EnMinutes", "min");
         resx.AddResource("EnSeconds", "sec");
 
-        //Exception messages
+        //Messages
         resx.AddResource("EnPublishingDateIsEarlierThanNowExceptionMessage",
             "Publishing date cannot be earlier than now!");
         resx.AddResource("EnEndDateIsEarlierThanNowExceptionMessage",
             "End date of notifications publishing cannot be earlier than now!");
+        resx.AddResource("EnObjectNumberIsBiggerThanAmountInSectionMessage",
+            "The number of the object that you wanted to delete is bigger than total amount of objects in the section!");
 
         //Object names
         resx.AddResource("EnScheduledMessages", "Scheduled notifications");
@@ -62,12 +64,14 @@ public class ResourceWriter
         resx.AddResource("RuMinutes", "мин");
         resx.AddResource("RuSeconds", "сек");
 
-        //Exception messages
+        //Messages
         resx.AddResource("RuPublishingDateIsEarlierThanNowExceptionMessage",
             "Дата публикации не может быть раньше текущего момента!");
         resx.AddResource("RuEndDateIsEarlierThanNowExceptionMessage",
             "Дата окончания публикации уведомлений не может быть раньше текущего момента!");
-        
+        resx.AddResource("RuObjectNumberIsBiggerThanAmountInSectionMessage",
+            "Вы ввели номер объекта, который больше, чем количество объектов в секции!");
+
         //Object names
         resx.AddResource("RuScheduledMessages", "Отложенные уведомления");
         resx.AddResource("RuRepeatedViaMinutesMessages", "Повторяемые через секунды уведомления");
