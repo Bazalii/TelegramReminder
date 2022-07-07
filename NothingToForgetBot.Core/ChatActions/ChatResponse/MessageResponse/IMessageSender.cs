@@ -2,5 +2,5 @@
 
 public interface IMessageSender
 {
-    public Task SendMessageToChat(long chatId, string messageText, CancellationToken cancellationToken);
+    Task SendMessageToChat(long chatId, string messageText, CancellationToken cancellationToken);
 }

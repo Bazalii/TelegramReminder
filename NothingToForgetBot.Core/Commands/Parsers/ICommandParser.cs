@@ -4,5 +4,5 @@ namespace NothingToForgetBot.Core.Commands.Parsers;
 
 public interface ICommandParser
 {
-    public Command Parse(string message);
+    Command Parse(string message);
 }

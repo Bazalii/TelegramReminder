@@ -15,9 +15,9 @@ public class UserNoteSelector : IUserNoteSelector
     public async Task<List<Note>> Select(long chatId, CancellationToken cancellationToken)
     {
         var notes = await _noteRepository.GetAllByChatId(chatId, cancellationToken);
-        
+
         notes.Sort((x, y) => string.Compare(x.Content, y.Content, StringComparison.Ordinal));
-        
+
         return notes;
     }
 }

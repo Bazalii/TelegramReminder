@@ -1,6 +1,6 @@
-﻿namespace NothingToForgetBot.Core.Timers.Models;
-using Timer = System.Timers.Timer;
+﻿using Timer = System.Timers.Timer;
 
+namespace NothingToForgetBot.Core.Timers.Models;
 
 public class RepeatedMessageTimers
 {
