@@ -15,9 +15,15 @@ public class CommandWithArgumentsParser : ICommandWithArgumentsParser
 
     public CommandWithArguments Parse(string message)
     {
-        var deleteCommandResourceValue = _resourceReader.GetString("CommandDelete");
-        
-        var deleteCommandRegex = new Regex($"{deleteCommandResourceValue}\\s\\d");
+        var deleteCommand = _resourceReader.GetString("CommandDelete");
+        var scheduledMessagesSection = _resourceReader.GetString("ScheduledMessagesSection");
+        var repeatedViaMinutesMessagesSection = _resourceReader.GetString("RepeatedViaMinutesMessagesSection");
+        var repeatedViaSecondsMessagesSection = _resourceReader.GetString("RepeatedViaSecondsMessagesSection");
+        var notesSection = _resourceReader.GetString("NotesSection");
+
+        var deleteCommandRegex =
+            new Regex($"{deleteCommand}\\s({scheduledMessagesSection}|{repeatedViaMinutesMessagesSection}" +
+                      $"|{repeatedViaSecondsMessagesSection}|{notesSection})\\s\\d");
 
         if (deleteCommandRegex.IsMatch(message))
         {
