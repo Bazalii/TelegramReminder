@@ -8,14 +8,16 @@ namespace NothingToForgetBot.Data;
 
 public class NothingToForgetBotContext : DbContext
 {
+    public DbSet<string> SupportedLanguages { get; set; }
+
     public DbSet<ChatWithLanguageDbModel> ChatsWithLanguage { get; set; }
-    
+
     public DbSet<ScheduledMessageDbModel> ScheduledMessages { get; set; }
-    
+
     public DbSet<RepeatedViaMinutesMessageDbModel> RepeatedViaMinutesMessages { get; set; }
-    
+
     public DbSet<RepeatedViaSecondsMessageDbModel> RepeatedViaSecondsMessages { get; set; }
-    
+
     public DbSet<NoteDbModel> Notes { get; set; }
 
     public NothingToForgetBotContext(DbContextOptions options)
@@ -35,7 +37,7 @@ public class NothingToForgetBotContext : DbContext
             .UseSnakeCaseNamingConvention()
             .UseLazyLoadingProxies();
     }
-    
+
     public class Factory : IDesignTimeDbContextFactory<NothingToForgetBotContext>
     {
         public NothingToForgetBotContext CreateDbContext(string[] args)
