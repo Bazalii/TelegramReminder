@@ -35,7 +35,7 @@ public class RepeatedViaMinutesMessageRepository : IRepeatedViaMinutesScheduledM
 
         if (dbModel is null)
         {
-            throw new ObjectNotFoundException($"Repeated message with id: {id} is not found");
+            throw new ObjectNotFoundException($"Repeated message with id: {id} is not found!");
         }
 
         return new RepeatedViaMinutesScheduledMessage
@@ -72,7 +72,7 @@ public class RepeatedViaMinutesMessageRepository : IRepeatedViaMinutesScheduledM
         
         if (dbModel is null)
         {
-            throw new ObjectNotFoundException($"Repeated message with id: {scheduledMessage.Id} is not found");
+            throw new ObjectNotFoundException($"Repeated message with id: {scheduledMessage.Id} is not found!");
         }
 
         dbModel.ChatId = scheduledMessage.ChatId;
@@ -88,7 +88,7 @@ public class RepeatedViaMinutesMessageRepository : IRepeatedViaMinutesScheduledM
         
         if (dbModel is null)
         {
-            throw new ObjectNotFoundException($"Repeated message with id: {id} is not found");
+            throw new ObjectNotFoundException($"Repeated message with id: {id} is not found!");
         }
 
         _context.RepeatedViaMinutesMessages.Remove(dbModel);

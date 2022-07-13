@@ -25,7 +25,7 @@ public class SupportedLanguagesRepository : ISupportedLanguagesRepository
     public Task Remove(string language, CancellationToken cancellationToken)
     {
         _context.SupportedLanguages.Remove(language);
-        
+
         return Task.CompletedTask;
     }
 }
