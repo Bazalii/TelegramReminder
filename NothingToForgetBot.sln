@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NothingToForgetBot.Core", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NothingToForgetBot.Data", "NothingToForgetBot.Data\NothingToForgetBot.Data.csproj", "{2D670E11-6DB2-4CFF-8031-575653CB16BD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NothingToForgetBot.Startup", "NothingToForgetBot.Startup\NothingToForgetBot.Startup.csproj", "{C7AF6892-6AEF-47DE-830C-7D13D224480A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{2D670E11-6DB2-4CFF-8031-575653CB16BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D670E11-6DB2-4CFF-8031-575653CB16BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D670E11-6DB2-4CFF-8031-575653CB16BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7AF6892-6AEF-47DE-830C-7D13D224480A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7AF6892-6AEF-47DE-830C-7D13D224480A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7AF6892-6AEF-47DE-830C-7D13D224480A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7AF6892-6AEF-47DE-830C-7D13D224480A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
