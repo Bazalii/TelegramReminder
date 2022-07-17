@@ -1,15 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="ResXResourceReader.NetStandard" Version="1.1.0" />
-      <PackageReference Include="Telegram.Bot" Version="18.0.0-alpha.3" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0"/>
+        <PackageReference Include="ResXResourceReader.NetStandard" Version="1.1.0"/>
+        <PackageReference Include="Telegram.Bot" Version="18.0.0-alpha.3"/>
     </ItemGroup>
 
 </Project>
