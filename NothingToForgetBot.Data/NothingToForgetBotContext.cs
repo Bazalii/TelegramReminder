@@ -8,7 +8,7 @@ namespace NothingToForgetBot.Data;
 
 public class NothingToForgetBotContext : DbContext
 {
-    public DbSet<string> SupportedLanguages { get; set; }
+    public DbSet<LanguageDbModel> SupportedLanguages { get; set; }
 
     public DbSet<ChatWithLanguageDbModel> ChatsWithLanguage { get; set; }
 
