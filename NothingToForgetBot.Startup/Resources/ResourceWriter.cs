@@ -1,6 +1,6 @@
 ﻿using System.Resources.NetStandard;
 
-namespace NothingToForgetBot.Core.Resources;
+namespace NothingToForgetBot.Startup.Resources;
 
 public class ResourceWriter
 {
@@ -29,6 +29,9 @@ public class ResourceWriter
         //Guide
         resx.AddResource("EnGuide", "BlaBla");
 
+        //Language
+        resx.AddResource("EnLanguage", "BlaBlaBla");
+
         //Scheduling markers
         resx.AddResource("EnAt", "at");
         resx.AddResource("EnIn", "in");
@@ -55,6 +58,9 @@ public class ResourceWriter
 
         //Guide
         resx.AddResource("RuGuide", "БлаБла");
+
+        //Language
+        resx.AddResource("RuLanguage", "БлаБлаБла");
 
         //Scheduling markers
         resx.AddResource("RuAt", "в");
