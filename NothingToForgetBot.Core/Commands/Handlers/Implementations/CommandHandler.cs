@@ -45,7 +45,7 @@ public class CommandHandler : ICommandHandler
     {
         var currentLanguage = await _chatLanguageRepository.GetLanguageByChatId(chatId, cancellationToken);
 
-        var message = _resourceReader.GetString($"{currentLanguage}Language");
+        var message = _resourceReader.GetString($"{currentLanguage}Guide");
 
         await _messageSender.SendMessageToChat(chatId, message, cancellationToken);
     }
