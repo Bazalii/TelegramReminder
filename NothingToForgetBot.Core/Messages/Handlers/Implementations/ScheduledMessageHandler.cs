@@ -1,7 +1,6 @@
 ﻿using NothingToForgetBot.Core.ChatActions.ChatResponse.MessageResponse;
 using NothingToForgetBot.Core.Messages.Models;
 using NothingToForgetBot.Core.Messages.Repositories;
-using NothingToForgetBot.Core.Timers;
 using NothingToForgetBot.Core.Timers.Handlers;
 using NothingToForgetBot.Core.Timers.Models;
 using Message = NothingToForgetBot.Core.Messages.Models.Message;
@@ -58,7 +57,7 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
 
         await _unitOfWork.SaveChanges(cancellationToken);
 
-        var interval = (scheduledMessage.PublishingDate - DateTime.Now).TotalMilliseconds;
+        var interval = (scheduledMessage.PublishingDate - DateTime.UtcNow).TotalMilliseconds;
 
         var timer = new Timer(interval);
 
@@ -163,6 +162,6 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
 
     private double CalculateEndTimerInterval(RepeatedMessage message)
     {
-        return (message.EndDate - DateTime.Now).TotalMilliseconds;
+        return (message.EndDate - DateTime.UtcNow).TotalMilliseconds;
     }
 }
