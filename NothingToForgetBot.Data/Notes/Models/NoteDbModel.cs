@@ -1,4 +1,7 @@
-﻿namespace NothingToForgetBot.Data.Notes.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace NothingToForgetBot.Data.Notes.Models;
 
 public class NoteDbModel
 {
@@ -7,4 +10,13 @@ public class NoteDbModel
     public long ChatId { get; set; }
 
     public string Content { get; set; }
+    
+    internal class Map : IEntityTypeConfiguration<NoteDbModel>
+    {
+        public void Configure(EntityTypeBuilder<NoteDbModel> builder)
+        {
+            builder.ToTable("notes");
+            builder.HasKey(dbModel => dbModel.Id).HasName("pk_note");
+        }
+    }
 }

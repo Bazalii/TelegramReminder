@@ -1,6 +1,6 @@
 ﻿using System.Resources.NetStandard;
 
-namespace NothingToForgetBot.Core.Resources;
+namespace NothingToForgetBot.Startup.Resources;
 
 public class ResourceWriter
 {
@@ -23,11 +23,17 @@ public class ResourceWriter
         resx.AddResource("RepeatedViaMinutesMessagesSection", "II");
         resx.AddResource("RepeatedViaSecondsMessagesSection", "III");
         resx.AddResource("NotesSection", "IV");
+        
+        //Defaults
+        resx.AddResource("DefaultLanguage", "En");
 
         //English localisation
 
         //Guide
         resx.AddResource("EnGuide", "BlaBla");
+
+        //Language
+        resx.AddResource("EnLanguage", "BlaBlaBla");
 
         //Scheduling markers
         resx.AddResource("EnAt", "at");
@@ -55,6 +61,9 @@ public class ResourceWriter
 
         //Guide
         resx.AddResource("RuGuide", "БлаБла");
+
+        //Language
+        resx.AddResource("RuLanguage", "БлаБлаБла");
 
         //Scheduling markers
         resx.AddResource("RuAt", "в");

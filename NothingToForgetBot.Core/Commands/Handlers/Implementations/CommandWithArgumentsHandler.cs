@@ -4,7 +4,6 @@ using NothingToForgetBot.Core.ChatActions.ChatResponse.MessageResponse;
 using NothingToForgetBot.Core.ChatActions.RecordSelectors;
 using NothingToForgetBot.Core.Enums;
 using NothingToForgetBot.Core.Notes.Repositories;
-using NothingToForgetBot.Core.Timers;
 using NothingToForgetBot.Core.Timers.Handlers;
 
 namespace NothingToForgetBot.Core.Commands.Handlers.Implementations;
@@ -126,7 +125,7 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
 
             var messageNumber = CalculateSavedObjectNumber(message, sectionIndex);
 
-            if (CheckIfNumberIsBiggerThanSectionObjectsTotalAmount(messageNumber, userRecords.Notes.Count - 1))
+            if (CheckIfNumberIsBiggerThanSectionObjectsTotalAmount(messageNumber, userRecords.Notes.Count))
             {
                 await ResponseOnBiggerObjectNumber(chatId, localisation, cancellationToken);
             }
@@ -146,7 +145,7 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
 
     private int CalculateSavedObjectNumber(string message, int sectionIndex)
     {
-        return Convert.ToInt16(message[(sectionIndex + 1)..]) - 1;
+        return Convert.ToInt16(message[(sectionIndex + 2)..]) - 1;
     }
 
     private bool CheckIfNumberIsBiggerThanSectionObjectsTotalAmount(int messageNumber, int totalAmount)
@@ -158,7 +157,7 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
         CancellationToken cancellationToken)
     {
         var responseMessage =
-            _resourceReader.GetString($"{localisation}EnObjectNumberIsBiggerThanAmountInSectionMessage");
+            _resourceReader.GetString($"{localisation}ObjectNumberIsBiggerThanAmountInSectionMessage");
 
         await _messageSender.SendMessageToChat(chatId, responseMessage, cancellationToken);
     }
