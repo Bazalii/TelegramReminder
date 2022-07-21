@@ -23,6 +23,9 @@ public class ResourceWriter
         resx.AddResource("RepeatedViaMinutesMessagesSection", "II");
         resx.AddResource("RepeatedViaSecondsMessagesSection", "III");
         resx.AddResource("NotesSection", "IV");
+        
+        //Defaults
+        resx.AddResource("DefaultLanguage", "En");
 
         //English localisation
 
