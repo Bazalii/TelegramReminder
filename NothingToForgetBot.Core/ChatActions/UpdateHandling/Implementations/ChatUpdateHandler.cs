@@ -1,4 +1,5 @@
-﻿using NothingToForgetBot.Core.Commands.Handlers;
+﻿using NothingToForgetBot.Core.ChatActions.ChatResponse.MessageResponse;
+using NothingToForgetBot.Core.Commands.Handlers;
 using NothingToForgetBot.Core.Commands.Parsers;
 using NothingToForgetBot.Core.Enums;
 using NothingToForgetBot.Core.Exceptions;
@@ -35,11 +36,13 @@ public class ChatUpdateHandler : IChatUpdateHandler
 
     private readonly IChatLanguageRepository _chatLanguageRepository;
 
+    private readonly IMessageSender _messageSender;
+
     public ChatUpdateHandler(ICommandParser commandParser, ICommandWithArgumentsParser commandWithArgumentsParser,
         IMessageParser messageParser, ISupportedLanguagesRepository supportedLanguagesRepository,
         ICommandHandler commandHandler, ICommandWithArgumentsHandler commandWithArgumentsHandler,
         INoteHandler noteHandler, IScheduledMessageHandler scheduledMessageHandler,
-        IChatLanguageRepository chatLanguageRepository)
+        IChatLanguageRepository chatLanguageRepository, IMessageSender messageSender)
     {
         _commandParser = commandParser;
         _commandWithArgumentsParser = commandWithArgumentsParser;
@@ -50,6 +53,7 @@ public class ChatUpdateHandler : IChatUpdateHandler
         _noteHandler = noteHandler;
         _scheduledMessageHandler = scheduledMessageHandler;
         _chatLanguageRepository = chatLanguageRepository;
+        _messageSender = messageSender;
     }
 
     public async Task HandleChatUpdate(ITelegramBotClient botClient, Update update,
@@ -107,6 +111,10 @@ public class ChatUpdateHandler : IChatUpdateHandler
             };
 
             await RespondOnNote(note, cancellationToken);
+        }
+        catch (DateIsEarlierThanNowException dateIsEarlierThanNowException)
+        {
+            await _messageSender.SendMessageToChat(chatId, dateIsEarlierThanNowException.Message, cancellationToken);
         }
     }
 
