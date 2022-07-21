@@ -129,6 +129,8 @@ public class MessageParser : IMessageParser
             var endDate =
                 new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, hour, minute, second);
 
+            endDate = endDate.ToUniversalTime();
+            
             if (endDate < DateTime.UtcNow)
             {
                 throw new DateIsEarlierThanNowException(endDateIsEarlierThanNowExceptionMessage);
@@ -161,6 +163,8 @@ public class MessageParser : IMessageParser
             var endDate =
                 new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, hour, minute, second);
 
+            endDate = endDate.ToUniversalTime();
+            
             if (endDate < DateTime.UtcNow)
             {
                 throw new DateIsEarlierThanNowException(endDateIsEarlierThanNowExceptionMessage);
