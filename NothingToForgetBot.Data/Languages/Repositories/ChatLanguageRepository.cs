@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Resources.NetStandard;
+using Microsoft.EntityFrameworkCore;
+using NothingToForgetBot.Core;
 using NothingToForgetBot.Core.Languages;
 using NothingToForgetBot.Core.Languages.Repository;
 using NothingToForgetBot.Data.Exceptions;
@@ -10,9 +12,12 @@ public class ChatLanguageRepository : IChatLanguageRepository
 {
     private readonly NothingToForgetBotContext _context;
 
-    public ChatLanguageRepository(NothingToForgetBotContext context)
+    private readonly ResXResourceReader _resourceReader;
+
+    public ChatLanguageRepository(NothingToForgetBotContext context, ResXResourceReader resourceReader)
     {
         _context = context;
+        _resourceReader = resourceReader;
     }
 
     public async Task Add(ChatWithLanguage chatWithLanguage, CancellationToken cancellationToken)
@@ -30,12 +35,7 @@ public class ChatLanguageRepository : IChatLanguageRepository
             .AsNoTracking()
             .FirstOrDefaultAsync(chatWithLanguage => chatWithLanguage.ChatId == chatId, cancellationToken);
 
-        if (dbModel is null)
-        {
-            throw new ObjectNotFoundException($"Chat with id: {chatId} is not found!");
-        }
-
-        return dbModel.Language;
+        return dbModel is null ? _resourceReader.GetString("DefaultLanguage") : dbModel.Language;
     }
 
     public async Task Update(ChatWithLanguage chatWithLanguage, CancellationToken cancellationToken)
