@@ -14,7 +14,7 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
 
     private readonly IRepeatedViaMinutesMessageRepository _repeatedViaMinutesMessageRepository;
 
-    private readonly IRepeatedViaSecondsScheduledMessageRepository _repeatedViaSecondsScheduledMessageRepository;
+    private readonly IRepeatedViaSecondsMessageRepository _repeatedViaSecondsMessageRepository;
 
     private readonly IMessageSender _messageSender;
 
@@ -24,12 +24,12 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
 
     public ScheduledMessageHandler(IScheduledMessageRepository scheduledMessageRepository,
         IRepeatedViaMinutesMessageRepository repeatedViaMinutesMessageRepository,
-        IRepeatedViaSecondsScheduledMessageRepository repeatedViaSecondsScheduledMessageRepository,
+        IRepeatedViaSecondsMessageRepository repeatedViaSecondsMessageRepository,
         IMessageSender messageSender, ITimerHandler timerHandler, IUnitOfWork unitOfWork)
     {
         _scheduledMessageRepository = scheduledMessageRepository;
         _repeatedViaMinutesMessageRepository = repeatedViaMinutesMessageRepository;
-        _repeatedViaSecondsScheduledMessageRepository = repeatedViaSecondsScheduledMessageRepository;
+        _repeatedViaSecondsMessageRepository = repeatedViaSecondsMessageRepository;
         _messageSender = messageSender;
         _timerHandler = timerHandler;
         _unitOfWork = unitOfWork;
@@ -45,8 +45,8 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
             case RepeatedViaMinutesMessage repeatedViaMinutesMessage:
                 await HandleRepeatedViaMinutesMessage(repeatedViaMinutesMessage, cancellationToken);
                 break;
-            case RepeatedViaSecondsScheduledMessage repeatedViaSecondsScheduledMessage:
-                await HandleRepeatedViaSecondsScheduledMessage(repeatedViaSecondsScheduledMessage, cancellationToken);
+            case RepeatedViaSecondsMessage repeatedViaSecondsMessage:
+                await HandleRepeatedViaSecondsMessage(repeatedViaSecondsMessage, cancellationToken);
                 break;
         }
     }
@@ -93,18 +93,18 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
         await HandleRepeatedMessage(repeatedMessage, repeatedTimerInterval, endTimerInterval, cancellationToken);
     }
 
-    private async Task HandleRepeatedViaSecondsScheduledMessage(RepeatedViaSecondsScheduledMessage scheduledMessage,
+    private async Task HandleRepeatedViaSecondsMessage(RepeatedViaSecondsMessage repeatedMessage,
         CancellationToken cancellationToken)
     {
-        await _repeatedViaSecondsScheduledMessageRepository.Add(scheduledMessage, cancellationToken);
+        await _repeatedViaSecondsMessageRepository.Add(repeatedMessage, cancellationToken);
 
         await _unitOfWork.SaveChanges(cancellationToken);
 
-        var repeatedTimerInterval = scheduledMessage.Interval * 1000;
+        var repeatedTimerInterval = repeatedMessage.Interval * 1000;
 
-        var endTimerInterval = CalculateEndTimerInterval(scheduledMessage);
+        var endTimerInterval = CalculateEndTimerInterval(repeatedMessage);
 
-        await HandleRepeatedMessage(scheduledMessage, repeatedTimerInterval, endTimerInterval, cancellationToken);
+        await HandleRepeatedMessage(repeatedMessage, repeatedTimerInterval, endTimerInterval, cancellationToken);
     }
 
     private async Task HandleRepeatedMessage(RepeatedMessage repeatedMessage, int repeatedTimerInterval,
@@ -130,12 +130,10 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
             switch (repeatedMessage)
             {
                 case RepeatedViaMinutesMessage repeatedViaMinutesMessage:
-                    await _repeatedViaMinutesMessageRepository.Remove(repeatedViaMinutesMessage.Id,
-                        cancellationToken);
+                    await _repeatedViaMinutesMessageRepository.Remove(repeatedViaMinutesMessage.Id, cancellationToken);
                     break;
-                case RepeatedViaSecondsScheduledMessage repeatedViaSecondsScheduledMessage:
-                    await _repeatedViaSecondsScheduledMessageRepository.Remove(repeatedViaSecondsScheduledMessage.Id,
-                        cancellationToken);
+                case RepeatedViaSecondsMessage repeatedViaSecondsMessage:
+                    await _repeatedViaSecondsMessageRepository.Remove(repeatedViaSecondsMessage.Id, cancellationToken);
                     break;
             }
 

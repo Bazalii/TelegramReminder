@@ -15,13 +15,13 @@ public class TimerHandler : ITimerHandler
 
     private readonly IRepeatedViaMinutesMessageRepository _repeatedViaMinutesMessageRepository;
 
-    private readonly IRepeatedViaSecondsScheduledMessageRepository _repeatedViaSecondsMessageRepository;
+    private readonly IRepeatedViaSecondsMessageRepository _repeatedViaSecondsMessageRepository;
 
     private readonly IUnitOfWork _unitOfWork;
 
     public TimerHandler(IScheduledMessageRepository scheduledMessageRepository,
         IRepeatedViaMinutesMessageRepository repeatedViaMinutesMessageRepository,
-        IRepeatedViaSecondsScheduledMessageRepository repeatedViaSecondsMessageRepository, IUnitOfWork unitOfWork)
+        IRepeatedViaSecondsMessageRepository repeatedViaSecondsMessageRepository, IUnitOfWork unitOfWork)
     {
         _scheduledMessageRepository = scheduledMessageRepository;
         _repeatedViaMinutesMessageRepository = repeatedViaMinutesMessageRepository;

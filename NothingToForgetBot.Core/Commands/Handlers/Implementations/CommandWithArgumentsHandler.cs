@@ -107,14 +107,14 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
             var messageNumber = CalculateSavedObjectNumber(message, sectionIndex);
 
             if (CheckIfNumberIsBiggerThanSectionObjectsTotalAmount(messageNumber,
-                    userRecords.RepeatedViaSecondsScheduledMessages.Count - 1))
+                    userRecords.RepeatedViaSecondsMessages.Count - 1))
             {
                 await ResponseOnBiggerObjectNumber(chatId, localisation, cancellationToken);
             }
             else
             {
                 await _timerHandler.RemoveRepeatedViaSecondsMessageTimers(
-                    userRecords.RepeatedViaSecondsScheduledMessages[messageNumber].Id,
+                    userRecords.RepeatedViaSecondsMessages[messageNumber].Id,
                     cancellationToken);
             }
         }

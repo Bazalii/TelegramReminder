@@ -9,15 +9,15 @@ public class UserMessageSelector : IUserMessageSelector
 
     private readonly IRepeatedViaMinutesMessageRepository _repeatedViaMinutesMessageRepository;
 
-    private readonly IRepeatedViaSecondsScheduledMessageRepository _repeatedViaSecondsScheduledMessageRepository;
+    private readonly IRepeatedViaSecondsMessageRepository _repeatedViaSecondsMessageRepository;
 
     public UserMessageSelector(IScheduledMessageRepository scheduledMessageRepository,
         IRepeatedViaMinutesMessageRepository repeatedViaMinutesMessageRepository,
-        IRepeatedViaSecondsScheduledMessageRepository repeatedViaSecondsScheduledMessageRepository)
+        IRepeatedViaSecondsMessageRepository repeatedViaSecondsMessageRepository)
     {
         _scheduledMessageRepository = scheduledMessageRepository;
         _repeatedViaMinutesMessageRepository = repeatedViaMinutesMessageRepository;
-        _repeatedViaSecondsScheduledMessageRepository = repeatedViaSecondsScheduledMessageRepository;
+        _repeatedViaSecondsMessageRepository = repeatedViaSecondsMessageRepository;
     }
 
     public async Task<UserMessages> Select(long chatId, CancellationToken cancellationToken)
@@ -28,7 +28,7 @@ public class UserMessageSelector : IUserMessageSelector
             await _repeatedViaMinutesMessageRepository.GetAllByChatId(chatId, cancellationToken);
 
         var repeatedViaSecondsMessages =
-            await _repeatedViaSecondsScheduledMessageRepository.GetAllByChatId(chatId, cancellationToken);
+            await _repeatedViaSecondsMessageRepository.GetAllByChatId(chatId, cancellationToken);
 
         scheduledMessages.Sort((x, y) => x.PublishingDate.CompareTo(y.PublishingDate));
 
@@ -40,7 +40,7 @@ public class UserMessageSelector : IUserMessageSelector
         {
             ScheduledMessages = scheduledMessages,
             RepeatedViaMinutesMessages = repeatedViaMinutesMessages,
-            RepeatedViaSecondsScheduledMessages = repeatedViaSecondsMessages
+            RepeatedViaSecondsMessages = repeatedViaSecondsMessages
         };
     }
 }

@@ -20,7 +20,7 @@ public static class ServiceCollectionExtensions
             .AddSingleton<ISupportedLanguagesRepository, SupportedLanguagesRepository>()
             .AddSingleton<IScheduledMessageRepository, ScheduledMessageRepository>()
             .AddSingleton<IRepeatedViaMinutesMessageRepository, RepeatedViaMinutesMessageRepository>()
-            .AddSingleton<IRepeatedViaSecondsScheduledMessageRepository, RepeatedViaSecondsMessageRepository>()
+            .AddSingleton<IRepeatedViaSecondsMessageRepository, RepeatedViaSecondsMessageRepository>()
             .AddSingleton<INoteRepository, NoteRepository>()
             .AddSingleton<IUnitOfWork, EfUnitOfWork>()
             .AddDbContext<NothingToForgetBotContext>(options => options
