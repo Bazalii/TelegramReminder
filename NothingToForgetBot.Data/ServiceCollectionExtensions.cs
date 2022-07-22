@@ -19,7 +19,7 @@ public static class ServiceCollectionExtensions
             .AddSingleton<IChatLanguageRepository, ChatLanguageRepository>()
             .AddSingleton<ISupportedLanguagesRepository, SupportedLanguagesRepository>()
             .AddSingleton<IScheduledMessageRepository, ScheduledMessageRepository>()
-            .AddSingleton<IRepeatedViaMinutesScheduledMessageRepository, RepeatedViaMinutesMessageRepository>()
+            .AddSingleton<IRepeatedViaMinutesMessageRepository, RepeatedViaMinutesMessageRepository>()
             .AddSingleton<IRepeatedViaSecondsScheduledMessageRepository, RepeatedViaSecondsMessageRepository>()
             .AddSingleton<INoteRepository, NoteRepository>()
             .AddSingleton<IUnitOfWork, EfUnitOfWork>()

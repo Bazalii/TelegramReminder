@@ -26,7 +26,7 @@ public class UserRecordSelector : IUserRecordSelector
         return new UserRecords
         {
             ScheduledMessages = userMessages.ScheduledMessages,
-            RepeatedViaMinutesScheduledMessages = userMessages.RepeatedViaMinutesScheduledMessages,
+            RepeatedViaMinutesMessages = userMessages.RepeatedViaMinutesMessages,
             RepeatedViaSecondsScheduledMessages = userMessages.RepeatedViaSecondsScheduledMessages,
             Notes = userNotes
         };

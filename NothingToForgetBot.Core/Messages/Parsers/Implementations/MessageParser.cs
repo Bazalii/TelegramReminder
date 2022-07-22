@@ -34,7 +34,7 @@ public class MessageParser : IMessageParser
         var messageScheduledInMinutesRegex = new Regex($".+\\s+{inResourceValue}\\s\\d+\\s+{minutesResourceValue}.+");
         var messageScheduledInSecondsRegex = new Regex($".+\\s+{inResourceValue}\\s\\d+\\s+{secondsResourceValue}.+");
         var messageWithPublishingTimeRegex = new Regex($".+\\s+\\d+\\.\\d+\\s{atResourceValue}\\s\\d+:\\d+\\s?.+");
-        var repeatedViaMinutesScheduledMessageRegex = new Regex(
+        var repeatedViaMinutesMessageRegex = new Regex(
             $".+\\s+{everyResourceValue}\\s\\d+\\s{minutesResourceValue}.?\\s{untilResourceValue}\\s\\d+:\\d+\\s?.+");
         var repeatedViaSecondsScheduledMessageRegex = new Regex(
             $".+\\s+{everyResourceValue}\\s\\d+\\s{secondsResourceValue}.?\\s{untilResourceValue}\\s\\d+:\\d+\\s?.+");
@@ -110,7 +110,7 @@ public class MessageParser : IMessageParser
             };
         }
 
-        if (repeatedViaMinutesScheduledMessageRegex.IsMatch(message))
+        if (repeatedViaMinutesMessageRegex.IsMatch(message))
         {
             var indexOfEvery = message.LastIndexOf(everyResourceValue, StringComparison.Ordinal);
             var indexOfUntil = message.LastIndexOf(untilResourceValue, StringComparison.Ordinal);
@@ -130,13 +130,13 @@ public class MessageParser : IMessageParser
                 new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, hour, minute, second);
 
             endDate = endDate.ToUniversalTime();
-            
+
             if (endDate < DateTime.UtcNow)
             {
                 throw new DateIsEarlierThanNowException(endDateIsEarlierThanNowExceptionMessage);
             }
 
-            return new RepeatedViaMinutesScheduledMessage
+            return new RepeatedViaMinutesMessage
             {
                 Content = content,
                 Interval = interval,
@@ -164,7 +164,7 @@ public class MessageParser : IMessageParser
                 new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, hour, minute, second);
 
             endDate = endDate.ToUniversalTime();
-            
+
             if (endDate < DateTime.UtcNow)
             {
                 throw new DateIsEarlierThanNowException(endDateIsEarlierThanNowExceptionMessage);

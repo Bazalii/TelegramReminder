@@ -7,7 +7,7 @@ public class UserRecords
 {
     public List<ScheduledMessage> ScheduledMessages { get; set; }
 
-    public List<RepeatedViaMinutesScheduledMessage> RepeatedViaMinutesScheduledMessages { get; set; }
+    public List<RepeatedViaMinutesMessage> RepeatedViaMinutesMessages { get; set; }
 
     public List<RepeatedViaSecondsScheduledMessage> RepeatedViaSecondsScheduledMessages { get; set; }
 
