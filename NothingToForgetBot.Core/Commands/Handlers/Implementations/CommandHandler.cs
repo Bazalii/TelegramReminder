@@ -89,10 +89,10 @@ public class CommandHandler : ICommandHandler
 
         message += $"{repeatedViaMinutesMessagesSectionResourceValue}. {repeatedViaMinutesMessagesResourceValue}\n";
 
-        for (var i = 0; i < userRecords.RepeatedViaMinutesScheduledMessages.Count; i++)
+        for (var i = 0; i < userRecords.RepeatedViaMinutesMessages.Count; i++)
         {
             message +=
-                $"{i + 1}) {userRecords.RepeatedViaMinutesScheduledMessages[i].ToString(every, minutes, until)}\n";
+                $"{i + 1}) {userRecords.RepeatedViaMinutesMessages[i].ToString(every, minutes, until)}\n";
         }
 
         var repeatedViaSecondsMessagesSectionResourceValue =

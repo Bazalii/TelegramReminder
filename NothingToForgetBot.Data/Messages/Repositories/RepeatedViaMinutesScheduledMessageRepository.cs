@@ -6,7 +6,7 @@ using NothingToForgetBot.Data.Messages.Models;
 
 namespace NothingToForgetBot.Data.Messages.Repositories;
 
-public class RepeatedViaMinutesMessageRepository : IRepeatedViaMinutesScheduledMessageRepository
+public class RepeatedViaMinutesMessageRepository : IRepeatedViaMinutesMessageRepository
 {
     private readonly NothingToForgetBotContext _context;
 
@@ -15,19 +15,19 @@ public class RepeatedViaMinutesMessageRepository : IRepeatedViaMinutesScheduledM
         _context = context;
     }
 
-    public async Task Add(RepeatedViaMinutesScheduledMessage scheduledMessage, CancellationToken cancellationToken)
+    public async Task Add(RepeatedViaMinutesMessage repeatedMessage, CancellationToken cancellationToken)
     {
         await _context.RepeatedViaMinutesMessages.AddAsync(new RepeatedViaMinutesMessageDbModel
         {
-            Id = scheduledMessage.Id,
-            ChatId = scheduledMessage.ChatId,
-            Content = scheduledMessage.Content,
-            Interval = scheduledMessage.Interval,
-            EndDate = scheduledMessage.EndDate
+            Id = repeatedMessage.Id,
+            ChatId = repeatedMessage.ChatId,
+            Content = repeatedMessage.Content,
+            Interval = repeatedMessage.Interval,
+            EndDate = repeatedMessage.EndDate
         }, cancellationToken);
     }
 
-    public async Task<RepeatedViaMinutesScheduledMessage> GetById(Guid id, CancellationToken cancellationToken)
+    public async Task<RepeatedViaMinutesMessage> GetById(Guid id, CancellationToken cancellationToken)
     {
         var dbModel = await _context.RepeatedViaMinutesMessages
             .AsNoTracking()
@@ -38,7 +38,7 @@ public class RepeatedViaMinutesMessageRepository : IRepeatedViaMinutesScheduledM
             throw new ObjectNotFoundException($"Repeated message with id: {id} is not found!");
         }
 
-        return new RepeatedViaMinutesScheduledMessage
+        return new RepeatedViaMinutesMessage
         {
             Id = dbModel.Id,
             ChatId = dbModel.ChatId,
@@ -48,12 +48,12 @@ public class RepeatedViaMinutesMessageRepository : IRepeatedViaMinutesScheduledM
         };
     }
 
-    public async Task<List<RepeatedViaMinutesScheduledMessage>> GetAllByChatId(long chatId,
+    public async Task<List<RepeatedViaMinutesMessage>> GetAllByChatId(long chatId,
         CancellationToken cancellationToken)
     {
         return await _context.RepeatedViaMinutesMessages
             .AsNoTracking()
-            .Select(message => new RepeatedViaMinutesScheduledMessage
+            .Select(message => new RepeatedViaMinutesMessage
             {
                 Id = message.Id,
                 ChatId = message.ChatId,
@@ -65,20 +65,20 @@ public class RepeatedViaMinutesMessageRepository : IRepeatedViaMinutesScheduledM
             .ToListAsync(cancellationToken);
     }
 
-    public async Task Update(RepeatedViaMinutesScheduledMessage scheduledMessage, CancellationToken cancellationToken)
+    public async Task Update(RepeatedViaMinutesMessage repeatedMessage, CancellationToken cancellationToken)
     {
         var dbModel = await _context.RepeatedViaMinutesMessages
-            .FirstOrDefaultAsync(message => message.Id == scheduledMessage.Id, cancellationToken);
+            .FirstOrDefaultAsync(message => message.Id == repeatedMessage.Id, cancellationToken);
         
         if (dbModel is null)
         {
-            throw new ObjectNotFoundException($"Repeated message with id: {scheduledMessage.Id} is not found!");
+            throw new ObjectNotFoundException($"Repeated message with id: {repeatedMessage.Id} is not found!");
         }
 
-        dbModel.ChatId = scheduledMessage.ChatId;
-        dbModel.Content = scheduledMessage.Content;
-        dbModel.Interval = scheduledMessage.Interval;
-        dbModel.EndDate = scheduledMessage.EndDate;
+        dbModel.ChatId = repeatedMessage.ChatId;
+        dbModel.Content = repeatedMessage.Content;
+        dbModel.Interval = repeatedMessage.Interval;
+        dbModel.EndDate = repeatedMessage.EndDate;
     }
 
     public async Task Remove(Guid id, CancellationToken cancellationToken)

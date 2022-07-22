@@ -7,16 +7,16 @@ public class UserMessageSelector : IUserMessageSelector
 {
     private readonly IScheduledMessageRepository _scheduledMessageRepository;
 
-    private readonly IRepeatedViaMinutesScheduledMessageRepository _repeatedViaMinutesScheduledMessageRepository;
+    private readonly IRepeatedViaMinutesMessageRepository _repeatedViaMinutesMessageRepository;
 
     private readonly IRepeatedViaSecondsScheduledMessageRepository _repeatedViaSecondsScheduledMessageRepository;
 
     public UserMessageSelector(IScheduledMessageRepository scheduledMessageRepository,
-        IRepeatedViaMinutesScheduledMessageRepository repeatedViaMinutesScheduledMessageRepository,
+        IRepeatedViaMinutesMessageRepository repeatedViaMinutesMessageRepository,
         IRepeatedViaSecondsScheduledMessageRepository repeatedViaSecondsScheduledMessageRepository)
     {
         _scheduledMessageRepository = scheduledMessageRepository;
-        _repeatedViaMinutesScheduledMessageRepository = repeatedViaMinutesScheduledMessageRepository;
+        _repeatedViaMinutesMessageRepository = repeatedViaMinutesMessageRepository;
         _repeatedViaSecondsScheduledMessageRepository = repeatedViaSecondsScheduledMessageRepository;
     }
 
@@ -25,7 +25,7 @@ public class UserMessageSelector : IUserMessageSelector
         var scheduledMessages = await _scheduledMessageRepository.GetAllByChatId(chatId, cancellationToken);
 
         var repeatedViaMinutesMessages =
-            await _repeatedViaMinutesScheduledMessageRepository.GetAllByChatId(chatId, cancellationToken);
+            await _repeatedViaMinutesMessageRepository.GetAllByChatId(chatId, cancellationToken);
 
         var repeatedViaSecondsMessages =
             await _repeatedViaSecondsScheduledMessageRepository.GetAllByChatId(chatId, cancellationToken);
@@ -39,7 +39,7 @@ public class UserMessageSelector : IUserMessageSelector
         return new UserMessages
         {
             ScheduledMessages = scheduledMessages,
-            RepeatedViaMinutesScheduledMessages = repeatedViaMinutesMessages,
+            RepeatedViaMinutesMessages = repeatedViaMinutesMessages,
             RepeatedViaSecondsScheduledMessages = repeatedViaSecondsMessages
         };
     }
