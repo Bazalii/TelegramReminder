@@ -36,7 +36,7 @@ public class MessageParser : IMessageParser
         var messageWithPublishingTimeRegex = new Regex($".+\\s+\\d+\\.\\d+\\s{atResourceValue}\\s\\d+:\\d+\\s?.+");
         var repeatedViaMinutesMessageRegex = new Regex(
             $".+\\s+{everyResourceValue}\\s\\d+\\s{minutesResourceValue}.?\\s{untilResourceValue}\\s\\d+:\\d+\\s?.+");
-        var repeatedViaSecondsScheduledMessageRegex = new Regex(
+        var repeatedViaSecondsMessageRegex = new Regex(
             $".+\\s+{everyResourceValue}\\s\\d+\\s{secondsResourceValue}.?\\s{untilResourceValue}\\s\\d+:\\d+\\s?.+");
 
         if (messageScheduledInMinutesRegex.IsMatch(message))
@@ -144,7 +144,7 @@ public class MessageParser : IMessageParser
             };
         }
 
-        if (repeatedViaSecondsScheduledMessageRegex.IsMatch(message))
+        if (repeatedViaSecondsMessageRegex.IsMatch(message))
         {
             var indexOfEvery = message.LastIndexOf(everyResourceValue, StringComparison.Ordinal);
             var indexOfUntil = message.LastIndexOf(untilResourceValue, StringComparison.Ordinal);
@@ -170,7 +170,7 @@ public class MessageParser : IMessageParser
                 throw new DateIsEarlierThanNowException(endDateIsEarlierThanNowExceptionMessage);
             }
 
-            return new RepeatedViaSecondsScheduledMessage
+            return new RepeatedViaSecondsMessage
             {
                 Content = content,
                 Interval = interval,

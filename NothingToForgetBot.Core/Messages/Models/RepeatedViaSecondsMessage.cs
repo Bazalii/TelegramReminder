@@ -2,7 +2,7 @@
 
 namespace NothingToForgetBot.Core.Messages.Models;
 
-public class RepeatedViaSecondsScheduledMessage : RepeatedMessage
+public class RepeatedViaSecondsMessage : RepeatedMessage
 {
     public string ToString(string every, string seconds, string until)
     {
