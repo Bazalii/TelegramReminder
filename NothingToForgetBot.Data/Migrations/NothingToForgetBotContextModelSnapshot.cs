@@ -42,7 +42,7 @@ namespace NothingToForgetBot.Data.Migrations
                     b.ToTable("chats_with_language", (string)null);
                 });
 
-            modelBuilder.Entity("NothingToForgetBot.Data.Languages.Models.Language", b =>
+            modelBuilder.Entity("NothingToForgetBot.Data.Languages.Models.LanguageDbModel", b =>
                 {
                     b.Property<string>("Name")
                         .IsRequired()
@@ -158,6 +158,25 @@ namespace NothingToForgetBot.Data.Migrations
                         .HasName("pk_note");
 
                     b.ToTable("notes", (string)null);
+                });
+
+            modelBuilder.Entity("NothingToForgetBot.Data.TimeZones.Models.ChatTimeZoneDbModel", b =>
+                {
+                    b.Property<long>("ChatId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("chat_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("ChatId"));
+
+                    b.Property<int>("TimeZone")
+                        .HasColumnType("integer")
+                        .HasColumnName("time_zone");
+
+                    b.HasKey("ChatId")
+                        .HasName("pk_chat_time_zone");
+
+                    b.ToTable("chat_time_zones", (string)null);
                 });
 #pragma warning restore 612, 618
         }
