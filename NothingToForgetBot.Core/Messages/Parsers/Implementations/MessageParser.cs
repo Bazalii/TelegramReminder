@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using NothingToForgetBot.Core.Exceptions;
 using NothingToForgetBot.Core.Messages.Models;
+using NothingToForgetBot.Core.TimeZones.Repositories;
 
 namespace NothingToForgetBot.Core.Messages.Parsers.Implementations;
 
@@ -9,12 +10,16 @@ public class MessageParser : IMessageParser
 {
     private readonly ResXResourceReader _resourceReader;
 
-    public MessageParser(ResXResourceReader resourceReader)
+    private readonly ITimeZoneRepository _timeZoneRepository;
+
+    public MessageParser(ResXResourceReader resourceReader, ITimeZoneRepository timeZoneRepository)
     {
         _resourceReader = resourceReader;
+        _timeZoneRepository = timeZoneRepository;
     }
 
-    public Message Parse(string message, string localisation)
+    public async Task<Message> Parse(long chatId, string message, string localisation,
+        CancellationToken cancellationToken)
     {
         var timeSeparatorResourceValue = _resourceReader.GetString("TimeSeparator");
         var dateSeparatorResourceValue = _resourceReader.GetString("DateSeparator");
@@ -39,17 +44,18 @@ public class MessageParser : IMessageParser
         var repeatedViaSecondsMessageRegex = new Regex(
             $".+\\s+{everyResourceValue}\\s\\d+\\s{secondsResourceValue}.?\\s{untilResourceValue}\\s\\d+:\\d+\\s?.+");
 
+        var chatTimeZone = await _timeZoneRepository.GetByChatId(chatId, cancellationToken);
+        var timeZone = chatTimeZone.TimeZone;
+
         if (messageScheduledInMinutesRegex.IsMatch(message))
         {
             var indexOfMinutesWord = message.LastIndexOf(minutesResourceValue, StringComparison.Ordinal);
             var indexOfIn = message[..indexOfMinutesWord].LastIndexOf(inResourceValue, StringComparison.Ordinal);
 
-
             var content = message[..(indexOfIn - 1)];
             var publishingDate = DateTime.UtcNow +
-                                 TimeSpan.FromMinutes(
-                                     Convert.ToInt32(
-                                         message[(indexOfIn + inResourceValue.Length + 1)..(indexOfMinutesWord - 1)]));
+                                 TimeSpan.FromMinutes(Convert.ToInt32(
+                                     message[(indexOfIn + inResourceValue.Length + 1)..(indexOfMinutesWord - 1)]));
 
             return new ScheduledMessage
             {
@@ -65,9 +71,8 @@ public class MessageParser : IMessageParser
 
             var content = message[..(indexOfIn - 1)];
             var publishingDate = DateTime.UtcNow +
-                                 TimeSpan.FromSeconds(
-                                     Convert.ToInt32(
-                                         message[(indexOfIn + inResourceValue.Length + 1)..(indexOfSecondsWord - 1)]));
+                                 TimeSpan.FromSeconds(Convert.ToInt32(
+                                     message[(indexOfIn + inResourceValue.Length + 1)..(indexOfSecondsWord - 1)]));
 
             return new ScheduledMessage
             {
@@ -96,7 +101,7 @@ public class MessageParser : IMessageParser
             var month = Convert.ToInt32(message[indexOfMonth..(indexOfDateSeparator + 2)]);
             var year = DateTime.UtcNow.Year;
 
-            var publishingDate = new DateTime(year, month, day, hour, minute, second);
+            var publishingDate = new DateTime(year, month, day, hour, minute, second) - TimeSpan.FromHours(timeZone);
 
             if (publishingDate < DateTime.UtcNow)
             {
@@ -127,7 +132,8 @@ public class MessageParser : IMessageParser
             var minute = Convert.ToInt32(message[(indexOfTimeSeparator + 1)..(indexOfTimeSeparator + 3)]);
 
             var endDate =
-                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, hour, minute, second);
+                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, hour, minute, second) -
+                TimeSpan.FromHours(timeZone);
 
             endDate = endDate.ToUniversalTime();
 
@@ -161,7 +167,8 @@ public class MessageParser : IMessageParser
             var minute = Convert.ToInt32(message[(indexOfTimeSeparator + 1)..(indexOfTimeSeparator + 3)]);
 
             var endDate =
-                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, hour, minute, second);
+                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, hour, minute, second) +
+                TimeSpan.FromHours(timeZone);
 
             endDate = endDate.ToUniversalTime();
 
