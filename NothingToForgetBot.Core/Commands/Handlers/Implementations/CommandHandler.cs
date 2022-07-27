@@ -3,6 +3,7 @@ using NothingToForgetBot.Core.ChatActions.ChatResponse.MessageResponse;
 using NothingToForgetBot.Core.ChatActions.RecordSelectors;
 using NothingToForgetBot.Core.Enums;
 using NothingToForgetBot.Core.Languages.Repository;
+using NothingToForgetBot.Core.TimeZones.Repositories;
 
 namespace NothingToForgetBot.Core.Commands.Handlers.Implementations;
 
@@ -14,14 +15,18 @@ public class CommandHandler : ICommandHandler
 
     private readonly IChatLanguageRepository _chatLanguageRepository;
 
+    private readonly ITimeZoneRepository _timeZoneRepository;
+
     private readonly IUserRecordSelector _userRecordSelector;
 
     public CommandHandler(IMessageSender messageSender, ResXResourceReader resourceReader,
-        IChatLanguageRepository chatLanguageRepository, IUserRecordSelector userRecordSelector)
+        IChatLanguageRepository chatLanguageRepository, ITimeZoneRepository timeZoneRepository,
+        IUserRecordSelector userRecordSelector)
     {
         _messageSender = messageSender;
         _resourceReader = resourceReader;
         _chatLanguageRepository = chatLanguageRepository;
+        _timeZoneRepository = timeZoneRepository;
         _userRecordSelector = userRecordSelector;
     }
 
@@ -65,6 +70,9 @@ public class CommandHandler : ICommandHandler
 
         var currentLanguage = await _chatLanguageRepository.GetLanguageByChatId(chatId, cancellationToken);
 
+        var chatTimeZone = await _timeZoneRepository.GetByChatId(chatId, cancellationToken);
+        var timeZone = chatTimeZone.TimeZone;
+
         var message = string.Empty;
 
         var scheduledMessagesSectionResourceValue = _resourceReader.GetString("ScheduledMessagesSection");
@@ -74,6 +82,7 @@ public class CommandHandler : ICommandHandler
 
         for (var i = 0; i < userRecords.ScheduledMessages.Count; i++)
         {
+            userRecords.ScheduledMessages[i].PublishingDate += TimeSpan.FromHours(timeZone);
             message += $"{i + 1}) {userRecords.ScheduledMessages[i].ToString()}\n";
         }
 
@@ -91,6 +100,7 @@ public class CommandHandler : ICommandHandler
 
         for (var i = 0; i < userRecords.RepeatedViaMinutesMessages.Count; i++)
         {
+            userRecords.RepeatedViaMinutesMessages[i].EndDate += TimeSpan.FromHours(timeZone);
             message +=
                 $"{i + 1}) {userRecords.RepeatedViaMinutesMessages[i].ToString(every, minutes, until)}\n";
         }
@@ -104,6 +114,7 @@ public class CommandHandler : ICommandHandler
 
         for (var i = 0; i < userRecords.RepeatedViaSecondsMessages.Count; i++)
         {
+            userRecords.RepeatedViaSecondsMessages[i].EndDate += TimeSpan.FromHours(timeZone);
             message +=
                 $"{i + 1}) {userRecords.RepeatedViaSecondsMessages[i].ToString(every, seconds, until)}\n";
         }
