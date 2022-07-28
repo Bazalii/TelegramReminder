@@ -93,8 +93,7 @@ public class ChatUpdateHandler : IChatUpdateHandler
 
         try
         {
-            var message = await Task
-                .Run(() => _messageParser.Parse(messageText, currentLanguage), cancellationToken);
+            var message = await _messageParser.Parse(chatId, messageText, currentLanguage, cancellationToken);
 
             message.Id = Guid.NewGuid();
             message.ChatId = chatId;
