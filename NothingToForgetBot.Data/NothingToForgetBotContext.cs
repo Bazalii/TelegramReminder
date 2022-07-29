@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using NothingToForgetBot.Data.Languages.Models;
 using NothingToForgetBot.Data.Messages.Models;
 using NothingToForgetBot.Data.Notes.Models;
+using NothingToForgetBot.Data.TimeZones.Models;
 
 namespace NothingToForgetBot.Data;
 
@@ -11,6 +12,8 @@ public class NothingToForgetBotContext : DbContext
     public DbSet<LanguageDbModel> SupportedLanguages { get; set; }
 
     public DbSet<ChatWithLanguageDbModel> ChatsWithLanguage { get; set; }
+
+    public DbSet<ChatTimeZoneDbModel> ChatTimeZones { get; set; }
 
     public DbSet<ScheduledMessageDbModel> ScheduledMessages { get; set; }
 

@@ -3,5 +3,6 @@
 public enum CommandWithArguments
 {
     Delete,
+    SetTimeZone,
     NotCommandWithArguments
 }

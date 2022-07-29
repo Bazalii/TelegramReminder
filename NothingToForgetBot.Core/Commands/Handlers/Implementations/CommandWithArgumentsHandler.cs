@@ -3,8 +3,11 @@ using System.Text.RegularExpressions;
 using NothingToForgetBot.Core.ChatActions.ChatResponse.MessageResponse;
 using NothingToForgetBot.Core.ChatActions.RecordSelectors;
 using NothingToForgetBot.Core.Enums;
+using NothingToForgetBot.Core.Exceptions;
 using NothingToForgetBot.Core.Notes.Repositories;
 using NothingToForgetBot.Core.Timers.Handlers;
+using NothingToForgetBot.Core.TimeZones.Models;
+using NothingToForgetBot.Core.TimeZones.Repositories;
 
 namespace NothingToForgetBot.Core.Commands.Handlers.Implementations;
 
@@ -13,6 +16,8 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
     private readonly ITimerHandler _timerHandler;
 
     private readonly INoteRepository _noteRepository;
+
+    private readonly ITimeZoneRepository _timeZoneRepository;
 
     private readonly ResXResourceReader _resourceReader;
 
@@ -23,11 +28,12 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
     private readonly IUnitOfWork _unitOfWork;
 
     public CommandWithArgumentsHandler(ITimerHandler timerHandler, INoteRepository noteRepository,
-        ResXResourceReader resourceReader, IUserRecordSelector userRecordSelector, IMessageSender messageSender,
-        IUnitOfWork unitOfWork)
+        ITimeZoneRepository timeZoneRepository, ResXResourceReader resourceReader,
+        IUserRecordSelector userRecordSelector, IMessageSender messageSender, IUnitOfWork unitOfWork)
     {
         _timerHandler = timerHandler;
         _noteRepository = noteRepository;
+        _timeZoneRepository = timeZoneRepository;
         _resourceReader = resourceReader;
         _userRecordSelector = userRecordSelector;
         _messageSender = messageSender;
@@ -41,6 +47,9 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
         {
             case CommandWithArguments.Delete:
                 await HandleDeleteCommand(chatId, message, localisation, cancellationToken);
+                break;
+            case CommandWithArguments.SetTimeZone:
+                await HandleSetTimeZoneCommand(chatId, message, cancellationToken);
                 break;
         }
     }
@@ -136,6 +145,30 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
                 await _unitOfWork.SaveChanges(cancellationToken);
             }
         }
+    }
+
+    private async Task HandleSetTimeZoneCommand(long chatId, string message, CancellationToken cancellationToken)
+    {
+        var setTimeZoneCommand = _resourceReader.GetString("CommandSetTimeZone");
+
+        var timeZone = Convert.ToInt16(message[(setTimeZoneCommand.Length + 1)..]);
+
+        var chatWithTimeZone = new ChatTimeZone
+        {
+            ChatId = chatId,
+            TimeZone = timeZone
+        };
+
+        try
+        {
+            await _timeZoneRepository.Add(chatWithTimeZone, cancellationToken);
+        }
+        catch (ObjectAlreadyExistsException objectAlreadyExistsException)
+        {
+            await _timeZoneRepository.Update(chatWithTimeZone, cancellationToken);
+        }
+
+        await _unitOfWork.SaveChanges(cancellationToken);
     }
 
     private int CalculateSectionIndex(string message, string section)

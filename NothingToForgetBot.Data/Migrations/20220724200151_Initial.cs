@@ -11,6 +11,19 @@ namespace NothingToForgetBot.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "chat_time_zones",
+                columns: table => new
+                {
+                    chat_id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    time_zone = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_chat_time_zone", x => x.chat_id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "chats_with_language",
                 columns: table => new
                 {
@@ -93,6 +106,9 @@ namespace NothingToForgetBot.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "chat_time_zones");
+
             migrationBuilder.DropTable(
                 name: "chats_with_language");
 

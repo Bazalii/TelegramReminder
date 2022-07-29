@@ -5,9 +5,11 @@ using NothingToForgetBot.Core;
 using NothingToForgetBot.Core.Languages.Repository;
 using NothingToForgetBot.Core.Messages.Repositories;
 using NothingToForgetBot.Core.Notes.Repositories;
+using NothingToForgetBot.Core.TimeZones.Repositories;
 using NothingToForgetBot.Data.Languages.Repositories;
 using NothingToForgetBot.Data.Messages.Repositories;
 using NothingToForgetBot.Data.Notes.Repositories;
+using NothingToForgetBot.Data.TimeZones.Repositories;
 
 namespace NothingToForgetBot.Data;
 
@@ -22,6 +24,7 @@ public static class ServiceCollectionExtensions
             .AddSingleton<IRepeatedViaMinutesMessageRepository, RepeatedViaMinutesMessageRepository>()
             .AddSingleton<IRepeatedViaSecondsMessageRepository, RepeatedViaSecondsMessageRepository>()
             .AddSingleton<INoteRepository, NoteRepository>()
+            .AddSingleton<ITimeZoneRepository, TimeZoneRepository>()
             .AddSingleton<IUnitOfWork, EfUnitOfWork>()
             .AddDbContext<NothingToForgetBotContext>(options => options
                 .UseLazyLoadingProxies()

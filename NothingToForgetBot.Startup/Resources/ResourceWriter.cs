@@ -13,6 +13,7 @@ public class ResourceWriter
         resx.AddResource("CommandLanguage", "/language");
         resx.AddResource("CommandList", "/list");
         resx.AddResource("CommandDelete", "/delete");
+        resx.AddResource("CommandSetTimeZone", "/setTimeZone");
 
         //Separators
         resx.AddResource("TimeSeparator", ":");
