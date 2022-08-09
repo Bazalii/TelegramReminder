@@ -74,12 +74,12 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
 
         if (scheduledMessageDeletionRegex.IsMatch(message))
         {
-            var sectionIndex = CalculateSectionIndex(message, scheduledMessagesSection);
+            var indexOfSectionEnd = CalculateIndexOfSectionEnd(message, scheduledMessagesSection);
 
-            var messageNumber = CalculateSavedObjectNumber(message, sectionIndex);
+            var messageNumber = CalculateSavedObjectNumber(message, indexOfSectionEnd);
 
             if (CheckIfNumberIsBiggerThanSectionObjectsTotalAmount(messageNumber,
-                    userRecords.ScheduledMessages.Count - 1))
+                    userRecords.ScheduledMessages.Count))
             {
                 await ResponseOnBiggerObjectNumber(chatId, localisation, cancellationToken);
             }
@@ -92,12 +92,12 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
 
         if (repeatedViaMinutesMessageDeletionRegex.IsMatch(message))
         {
-            var sectionIndex = CalculateSectionIndex(message, repeatedViaMinutesMessagesSection);
+            var indexOfSectionEnd = CalculateIndexOfSectionEnd(message, repeatedViaMinutesMessagesSection);
 
-            var messageNumber = CalculateSavedObjectNumber(message, sectionIndex);
+            var messageNumber = CalculateSavedObjectNumber(message, indexOfSectionEnd);
 
             if (CheckIfNumberIsBiggerThanSectionObjectsTotalAmount(messageNumber,
-                    userRecords.RepeatedViaMinutesMessages.Count - 1))
+                    userRecords.RepeatedViaMinutesMessages.Count))
             {
                 await ResponseOnBiggerObjectNumber(chatId, localisation, cancellationToken);
             }
@@ -111,12 +111,12 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
 
         if (repeatedViaSecondsMessageDeletionRegex.IsMatch(message))
         {
-            var sectionIndex = CalculateSectionIndex(message, repeatedViaSecondsMessagesSection);
+            var indexOfSectionEnd = CalculateIndexOfSectionEnd(message, repeatedViaSecondsMessagesSection);
 
-            var messageNumber = CalculateSavedObjectNumber(message, sectionIndex);
+            var messageNumber = CalculateSavedObjectNumber(message, indexOfSectionEnd);
 
             if (CheckIfNumberIsBiggerThanSectionObjectsTotalAmount(messageNumber,
-                    userRecords.RepeatedViaSecondsMessages.Count - 1))
+                    userRecords.RepeatedViaSecondsMessages.Count))
             {
                 await ResponseOnBiggerObjectNumber(chatId, localisation, cancellationToken);
             }
@@ -130,9 +130,9 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
 
         if (noteDeletionRegex.IsMatch(message))
         {
-            var sectionIndex = CalculateSectionIndex(message, notesSection);
+            var indexOfSectionEnd = CalculateIndexOfSectionEnd(message, notesSection);
 
-            var messageNumber = CalculateSavedObjectNumber(message, sectionIndex);
+            var messageNumber = CalculateSavedObjectNumber(message, indexOfSectionEnd);
 
             if (CheckIfNumberIsBiggerThanSectionObjectsTotalAmount(messageNumber, userRecords.Notes.Count))
             {
@@ -171,14 +171,14 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
         await _unitOfWork.SaveChanges(cancellationToken);
     }
 
-    private int CalculateSectionIndex(string message, string section)
+    private int CalculateIndexOfSectionEnd(string message, string section)
     {
-        return message.IndexOf(section, StringComparison.Ordinal);
+        return message.IndexOf(section, StringComparison.Ordinal) + section.Length;
     }
 
-    private int CalculateSavedObjectNumber(string message, int sectionIndex)
+    private int CalculateSavedObjectNumber(string message, int indexOfSectionEnd)
     {
-        return Convert.ToInt16(message[(sectionIndex + 2)..]) - 1;
+        return Convert.ToInt16(message[indexOfSectionEnd..]) - 1;
     }
 
     private bool CheckIfNumberIsBiggerThanSectionObjectsTotalAmount(int messageNumber, int totalAmount)
