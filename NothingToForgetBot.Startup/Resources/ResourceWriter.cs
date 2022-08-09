@@ -24,14 +24,24 @@ public class ResourceWriter
         resx.AddResource("RepeatedViaMinutesMessagesSection", "II");
         resx.AddResource("RepeatedViaSecondsMessagesSection", "III");
         resx.AddResource("NotesSection", "IV");
-        
+
         //Defaults
         resx.AddResource("DefaultLanguage", "En");
 
         //English localisation
 
         //Guide
-        resx.AddResource("EnGuide", "BlaBla");
+        resx.AddResource("EnGuide",
+            "This bot can be used for scheduling notifications or handling your notes.\n" +
+            "You can schedule a notification that will be published once: eat in 2 min, go to bed in 30 sec.\n" +
+            "It is also possible to set the concrete publishing date: eat at 18:30.\n" +
+            "Furthermore you can set repeated notifications that will be published until specific time:\n" +
+            "jump every 5 sec until 12:30, play with dog every 30 min until 15:17.\n\n" +
+            "There is no pattern for notes, so just write down your thoughts and they will be saved.\n\n" +
+            "It's worth mentioning that you can delete a notification or a note.\n" +
+            "For that use /delete command using section and notification or note number inside this section:" +
+            "/delete IV 1, /delete I 10.\n\n" +
+            "Other available commands you can get in menu inside chat with this bot");
 
         //Language
         resx.AddResource("EnLanguage", "BlaBlaBla");
@@ -61,7 +71,17 @@ public class ResourceWriter
         //Russian localisation
 
         //Guide
-        resx.AddResource("RuGuide", "БлаБла");
+        resx.AddResource("RuGuide", 
+            "Этот бот может быть использован для отложенных уведомлений и заметок.\n" +
+            "Можно отложить однократное уведомление: поесть через 2 мин, пойти спать через 30 сек.\n" +
+            "Ещё возможно задать конкретную дату уведомления: покушать в 18:30.\n" +
+            "Более того, поддерживаются уведомления, которые будут повторяться до определённого времени:\n" +
+            "прыгать каждые 5 сек до 12:30, играть с собакой каждые 30 мин до 15:17.\n\n" +
+            "Для заметок отсутствует определённая форма сообщений, поэтому пишите любые мысли и они будут сохранены.\n\n" +
+            "Стоит отметить, существует возможность удаления напоминаний и заметок.\n" +
+            "Для этого используйте команду /delete, указывая секцию и номер сообщения или заметки внутри секции:" +
+            "/delete IV 1, /delete I 10.\n\n" +
+            "Чтобы посмотреть список доступных команд воспользуйтесь меню внутри чата с данным ботом");
 
         //Language
         resx.AddResource("RuLanguage", "БлаБлаБла");
