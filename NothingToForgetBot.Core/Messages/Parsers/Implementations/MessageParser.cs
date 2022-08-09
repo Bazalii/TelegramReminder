@@ -36,13 +36,14 @@ public class MessageParser : IMessageParser
         var endDateIsEarlierThanNowExceptionMessage =
             _resourceReader.GetString(localisation + "EndDateIsEarlierThanNowExceptionMessage");
 
-        var messageScheduledInMinutesRegex = new Regex($".+\\s+{inResourceValue}\\s\\d+\\s+{minutesResourceValue}.+");
-        var messageScheduledInSecondsRegex = new Regex($".+\\s+{inResourceValue}\\s\\d+\\s+{secondsResourceValue}.+");
-        var messageWithPublishingTimeRegex = new Regex($".+\\s+\\d+\\.\\d+\\s{atResourceValue}\\s\\d+:\\d+\\s?.+");
+        var messageScheduledInMinutesRegex = new Regex($".+\\s{inResourceValue}\\s\\d{{1,2}}\\s{minutesResourceValue}");
+        var messageScheduledInSecondsRegex = new Regex($".+\\s{inResourceValue}\\s\\d{{1,2}}\\s{secondsResourceValue}");
+        var messageWithPublishingTimeRegex =
+            new Regex($".+\\s\\d{{1,2}}\\.\\d{{1,2}}\\s{atResourceValue}\\s\\d{{1,2}}:\\d{{1,2}}");
         var repeatedViaMinutesMessageRegex = new Regex(
-            $".+\\s+{everyResourceValue}\\s\\d+\\s{minutesResourceValue}.?\\s{untilResourceValue}\\s\\d+:\\d+\\s?.+");
+            $".+\\s{everyResourceValue}\\s\\d+\\s{minutesResourceValue}\\s{untilResourceValue}\\s\\d{{1,2}}:\\d{{1,2}}");
         var repeatedViaSecondsMessageRegex = new Regex(
-            $".+\\s+{everyResourceValue}\\s\\d+\\s{secondsResourceValue}.?\\s{untilResourceValue}\\s\\d+:\\d+\\s?.+");
+            $".+\\s{everyResourceValue}\\s\\d+\\s{secondsResourceValue}\\s{untilResourceValue}\\s\\d{{1,2}}:\\d{{1,2}}");
 
         var chatTimeZone = await _timeZoneRepository.GetByChatId(chatId, cancellationToken);
         var timeZone = chatTimeZone.TimeZone;
@@ -132,10 +133,8 @@ public class MessageParser : IMessageParser
             var minute = Convert.ToInt32(message[(indexOfTimeSeparator + 1)..(indexOfTimeSeparator + 3)]);
 
             var endDate =
-                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, hour, minute, second) -
-                TimeSpan.FromHours(timeZone);
-
-            endDate = endDate.ToUniversalTime();
+                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, hour, minute, second,
+                    DateTimeKind.Utc) - TimeSpan.FromHours(timeZone);
 
             if (endDate < DateTime.UtcNow)
             {
@@ -167,10 +166,8 @@ public class MessageParser : IMessageParser
             var minute = Convert.ToInt32(message[(indexOfTimeSeparator + 1)..(indexOfTimeSeparator + 3)]);
 
             var endDate =
-                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, hour, minute, second) +
-                TimeSpan.FromHours(timeZone);
-
-            endDate = endDate.ToUniversalTime();
+                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, hour, minute, second,
+                    DateTimeKind.Utc) - TimeSpan.FromHours(timeZone);
 
             if (endDate < DateTime.UtcNow)
             {
