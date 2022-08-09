@@ -132,10 +132,8 @@ public class MessageParser : IMessageParser
             var minute = Convert.ToInt32(message[(indexOfTimeSeparator + 1)..(indexOfTimeSeparator + 3)]);
 
             var endDate =
-                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, hour, minute, second) -
-                TimeSpan.FromHours(timeZone);
-
-            endDate = endDate.ToUniversalTime();
+                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, hour, minute, second,
+                    DateTimeKind.Utc) - TimeSpan.FromHours(timeZone);
 
             if (endDate < DateTime.UtcNow)
             {
@@ -167,10 +165,8 @@ public class MessageParser : IMessageParser
             var minute = Convert.ToInt32(message[(indexOfTimeSeparator + 1)..(indexOfTimeSeparator + 3)]);
 
             var endDate =
-                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, hour, minute, second) +
-                TimeSpan.FromHours(timeZone);
-
-            endDate = endDate.ToUniversalTime();
+                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, hour, minute, second,
+                    DateTimeKind.Utc) - TimeSpan.FromHours(timeZone);
 
             if (endDate < DateTime.UtcNow)
             {
