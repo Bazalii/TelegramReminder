@@ -5,5 +5,6 @@ public enum Command
     Guide,
     List,
     Language,
+    SetLanguage,
     NotCommand
 }
