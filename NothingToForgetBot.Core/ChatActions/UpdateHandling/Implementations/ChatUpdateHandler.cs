@@ -74,8 +74,7 @@ public class ChatUpdateHandler : IChatUpdateHandler
 
         if (command != Command.NotCommand)
         {
-            await Task.Run(() => RespondOnCommand(command, chatId, currentLanguage, cancellationToken),
-                cancellationToken);
+            await Task.Run(() => RespondOnCommand(command, chatId, messageText, cancellationToken), cancellationToken);
             return;
         }
 
@@ -130,10 +129,10 @@ public class ChatUpdateHandler : IChatUpdateHandler
         return Task.Run(() => Console.WriteLine(errorMessage), cancellationToken);
     }
 
-    private Task RespondOnCommand(Command command, long chatId, string localisation,
+    private Task RespondOnCommand(Command command, long chatId, string message,
         CancellationToken cancellationToken)
     {
-        return _commandHandler.Handle(command, chatId, localisation, cancellationToken);
+        return _commandHandler.Handle(command, chatId, message, cancellationToken);
     }
 
     private Task RespondOnCommandWithArguments(CommandWithArguments command, long chatId, string localisation,
