@@ -2,6 +2,7 @@
 using NothingToForgetBot.Core.ChatActions.ChatResponse.MessageResponse;
 using NothingToForgetBot.Core.ChatActions.RecordSelectors;
 using NothingToForgetBot.Core.Enums;
+using NothingToForgetBot.Core.Languages;
 using NothingToForgetBot.Core.Languages.Repository;
 using NothingToForgetBot.Core.TimeZones.Repositories;
 
@@ -19,18 +20,21 @@ public class CommandHandler : ICommandHandler
 
     private readonly IUserRecordSelector _userRecordSelector;
 
+    private readonly IUnitOfWork _unitOfWork;
+
     public CommandHandler(IMessageSender messageSender, ResXResourceReader resourceReader,
         IChatLanguageRepository chatLanguageRepository, ITimeZoneRepository timeZoneRepository,
-        IUserRecordSelector userRecordSelector)
+        IUserRecordSelector userRecordSelector, IUnitOfWork unitOfWork)
     {
         _messageSender = messageSender;
         _resourceReader = resourceReader;
         _chatLanguageRepository = chatLanguageRepository;
         _timeZoneRepository = timeZoneRepository;
         _userRecordSelector = userRecordSelector;
+        _unitOfWork = unitOfWork;
     }
 
-    public async Task Handle(Command command, long chatId, string localisation, CancellationToken cancellationToken)
+    public async Task Handle(Command command, long chatId, string message, CancellationToken cancellationToken)
     {
         switch (command)
         {
@@ -41,7 +45,10 @@ public class CommandHandler : ICommandHandler
                 await RespondOnLanguageCommand(chatId, cancellationToken);
                 break;
             case Command.List:
-                await RespondOnListCommand(chatId, localisation, cancellationToken);
+                await RespondOnListCommand(chatId, cancellationToken);
+                break;
+            case Command.SetLanguage:
+                await RespondOnSetLanguageCommand(chatId, message, cancellationToken);
                 break;
         }
     }
@@ -64,8 +71,23 @@ public class CommandHandler : ICommandHandler
         await _messageSender.SendMessageToChat(chatId, message, cancellationToken);
     }
 
-    private async Task RespondOnListCommand(long chatId, string localisation, CancellationToken cancellationToken)
+    private async Task RespondOnSetLanguageCommand(long chatId, string message, CancellationToken cancellationToken)
     {
+        var chatWithLanguage = new ChatWithLanguage
+        {
+            ChatId = chatId,
+            Language = message[1].ToString().ToUpper() + message[2]
+        };
+
+        await _chatLanguageRepository.Add(chatWithLanguage, cancellationToken);
+
+        await _unitOfWork.SaveChanges(cancellationToken);
+    }
+
+    private async Task RespondOnListCommand(long chatId, CancellationToken cancellationToken)
+    {
+        var localisation = await _chatLanguageRepository.GetLanguageByChatId(chatId, cancellationToken);
+
         var userRecords = await _userRecordSelector.Select(chatId, cancellationToken);
 
         var currentLanguage = await _chatLanguageRepository.GetLanguageByChatId(chatId, cancellationToken);

@@ -14,6 +14,8 @@ public class ResourceWriter
         resx.AddResource("CommandList", "/list");
         resx.AddResource("CommandDelete", "/delete");
         resx.AddResource("CommandSetTimeZone", "/setTimeZone");
+        resx.AddResource("CommandEn", "/en");
+        resx.AddResource("CommandRu", "/ru");
 
         //Separators
         resx.AddResource("TimeSeparator", ":");

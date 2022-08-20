@@ -29,6 +29,11 @@ public class CommandParser : ICommandParser
             return Command.List;
         }
 
+        if (message == _resourceReader.GetString("CommandEn") || message == _resourceReader.GetString("CommandRu"))
+        {
+            return Command.SetLanguage;
+        }
+
         return Command.NotCommand;
     }
 }
