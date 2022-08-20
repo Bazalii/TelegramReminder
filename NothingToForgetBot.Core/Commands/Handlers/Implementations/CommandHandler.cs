@@ -20,15 +20,18 @@ public class CommandHandler : ICommandHandler
 
     private readonly IUserRecordSelector _userRecordSelector;
 
+    private readonly IUnitOfWork _unitOfWork;
+
     public CommandHandler(IMessageSender messageSender, ResXResourceReader resourceReader,
         IChatLanguageRepository chatLanguageRepository, ITimeZoneRepository timeZoneRepository,
-        IUserRecordSelector userRecordSelector)
+        IUserRecordSelector userRecordSelector, IUnitOfWork unitOfWork)
     {
         _messageSender = messageSender;
         _resourceReader = resourceReader;
         _chatLanguageRepository = chatLanguageRepository;
         _timeZoneRepository = timeZoneRepository;
         _userRecordSelector = userRecordSelector;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task Handle(Command command, long chatId, string message, CancellationToken cancellationToken)
@@ -73,10 +76,12 @@ public class CommandHandler : ICommandHandler
         var chatWithLanguage = new ChatWithLanguage
         {
             ChatId = chatId,
-            Language = message[1..]
+            Language = message[1].ToString().ToUpper() + message[2]
         };
 
         await _chatLanguageRepository.Add(chatWithLanguage, cancellationToken);
+
+        await _unitOfWork.SaveChanges(cancellationToken);
     }
 
     private async Task RespondOnListCommand(long chatId, CancellationToken cancellationToken)
