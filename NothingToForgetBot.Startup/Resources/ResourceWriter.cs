@@ -46,7 +46,8 @@ public class ResourceWriter
             "Other available commands you can get in menu inside chat with this bot");
 
         //Language
-        resx.AddResource("EnLanguage", "BlaBlaBla");
+        resx.AddResource("EnLanguage", "There are now two supported languages: Russian and English." +
+                                       " If you want to change current language use corresponding command: /ru, /en");
 
         //Scheduling markers
         resx.AddResource("EnAt", "at");
@@ -73,7 +74,7 @@ public class ResourceWriter
         //Russian localisation
 
         //Guide
-        resx.AddResource("RuGuide", 
+        resx.AddResource("RuGuide",
             "Этот бот может быть использован для отложенных уведомлений и заметок.\n" +
             "Можно отложить однократное уведомление: поесть через 2 мин, пойти спать через 30 сек.\n" +
             "Ещё возможно задать конкретную дату уведомления: покушать в 18:30.\n" +
@@ -86,7 +87,8 @@ public class ResourceWriter
             "Чтобы посмотреть список доступных команд воспользуйтесь меню внутри чата с данным ботом");
 
         //Language
-        resx.AddResource("RuLanguage", "БлаБлаБла");
+        resx.AddResource("RuLanguage", "На данный момент поддерживаются два языка: русский и английский." +
+                                       " Если вы хотите изменить текущий язык используйте соответствующую команду: /ru, /en");
 
         //Scheduling markers
         resx.AddResource("RuAt", "в");
