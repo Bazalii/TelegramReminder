@@ -29,6 +29,15 @@ public class ChatLanguageRepository : IChatLanguageRepository
         }, cancellationToken);
     }
 
+    public async Task<string?> GetLanguageByChatId(long chatId, CancellationToken cancellationToken)
+    {
+        var dbModel = await _context.ChatsWithLanguage
+            .AsNoTracking()
+            .FirstOrDefaultAsync(chatWithLanguage => chatWithLanguage.ChatId == chatId, cancellationToken);
+
+        return dbModel?.Language;
+    }
+    
     public async Task<string> GetLanguageByChatIdOrDefault(long chatId, CancellationToken cancellationToken)
     {
         var dbModel = await _context.ChatsWithLanguage
