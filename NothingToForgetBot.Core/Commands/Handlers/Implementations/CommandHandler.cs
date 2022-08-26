@@ -79,7 +79,16 @@ public class CommandHandler : ICommandHandler
             Language = message[1].ToString().ToUpper() + message[2]
         };
 
-        await _chatLanguageRepository.Add(chatWithLanguage, cancellationToken);
+        var chatLanguage = await _chatLanguageRepository.GetLanguageByChatId(chatId, cancellationToken);
+
+        if (chatLanguage is null)
+        {
+            await _chatLanguageRepository.Add(chatWithLanguage, cancellationToken);
+        }
+        else
+        {
+            await _chatLanguageRepository.Update(chatWithLanguage, cancellationToken);
+        }
 
         await _unitOfWork.SaveChanges(cancellationToken);
     }
