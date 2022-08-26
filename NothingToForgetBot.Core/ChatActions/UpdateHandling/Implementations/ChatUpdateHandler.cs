@@ -68,7 +68,7 @@ public class ChatUpdateHandler : IChatUpdateHandler
         var messageText = update.Message.Text ??
                           throw new NullMessageTextValueException("Message text cannot be null!");
 
-        var currentLanguage = await _chatLanguageRepository.GetLanguageByChatId(chatId, cancellationToken);
+        var currentLanguage = await _chatLanguageRepository.GetLanguageByChatIdOrDefault(chatId, cancellationToken);
 
         var command = await Task.Run(() => _commandParser.Parse(messageText), cancellationToken);
 

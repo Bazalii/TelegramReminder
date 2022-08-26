@@ -55,7 +55,7 @@ public class CommandHandler : ICommandHandler
 
     private async Task RespondOnGuideCommand(long chatId, CancellationToken cancellationToken)
     {
-        var currentLanguage = await _chatLanguageRepository.GetLanguageByChatId(chatId, cancellationToken);
+        var currentLanguage = await _chatLanguageRepository.GetLanguageByChatIdOrDefault(chatId, cancellationToken);
 
         var message = _resourceReader.GetString($"{currentLanguage}Guide");
 
@@ -64,7 +64,7 @@ public class CommandHandler : ICommandHandler
 
     private async Task RespondOnLanguageCommand(long chatId, CancellationToken cancellationToken)
     {
-        var currentLanguage = await _chatLanguageRepository.GetLanguageByChatId(chatId, cancellationToken);
+        var currentLanguage = await _chatLanguageRepository.GetLanguageByChatIdOrDefault(chatId, cancellationToken);
 
         var message = _resourceReader.GetString($"{currentLanguage}Language");
 
@@ -79,18 +79,27 @@ public class CommandHandler : ICommandHandler
             Language = message[1].ToString().ToUpper() + message[2]
         };
 
-        await _chatLanguageRepository.Add(chatWithLanguage, cancellationToken);
+        var chatLanguage = await _chatLanguageRepository.GetLanguageByChatId(chatId, cancellationToken);
+
+        if (chatLanguage is null)
+        {
+            await _chatLanguageRepository.Add(chatWithLanguage, cancellationToken);
+        }
+        else
+        {
+            await _chatLanguageRepository.Update(chatWithLanguage, cancellationToken);
+        }
 
         await _unitOfWork.SaveChanges(cancellationToken);
     }
 
     private async Task RespondOnListCommand(long chatId, CancellationToken cancellationToken)
     {
-        var localisation = await _chatLanguageRepository.GetLanguageByChatId(chatId, cancellationToken);
+        var localisation = await _chatLanguageRepository.GetLanguageByChatIdOrDefault(chatId, cancellationToken);
 
         var userRecords = await _userRecordSelector.Select(chatId, cancellationToken);
 
-        var currentLanguage = await _chatLanguageRepository.GetLanguageByChatId(chatId, cancellationToken);
+        var currentLanguage = await _chatLanguageRepository.GetLanguageByChatIdOrDefault(chatId, cancellationToken);
 
         var chatTimeZone = await _timeZoneRepository.GetByChatId(chatId, cancellationToken);
         var timeZone = chatTimeZone.TimeZone;
