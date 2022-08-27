@@ -7,7 +7,7 @@ public class ChatWithLanguageDbModel
 {
     public long ChatId { get; set; }
 
-    public string Language { get; set; }
+    public string Language { get; set; } = string.Empty;
     
     internal class Map : IEntityTypeConfiguration<ChatWithLanguageDbModel>
     {

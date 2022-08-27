@@ -5,7 +5,7 @@ namespace NothingToForgetBot.Data.Languages.Models;
 
 public class LanguageDbModel
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
     
     internal class Map : IEntityTypeConfiguration<LanguageDbModel>
     {

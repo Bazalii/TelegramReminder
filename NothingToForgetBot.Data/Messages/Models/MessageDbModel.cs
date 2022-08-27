@@ -6,5 +6,5 @@ public abstract class MessageDbModel
 
     public long ChatId { get; set; }
 
-    public string Content { get; set; }
+    public string Content { get; set; } = string.Empty;
 }
