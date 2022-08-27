@@ -163,7 +163,7 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
         {
             await _timeZoneRepository.Add(chatWithTimeZone, cancellationToken);
         }
-        catch (ObjectAlreadyExistsException objectAlreadyExistsException)
+        catch (ObjectAlreadyExistsException)
         {
             await _timeZoneRepository.Update(chatWithTimeZone, cancellationToken);
         }
