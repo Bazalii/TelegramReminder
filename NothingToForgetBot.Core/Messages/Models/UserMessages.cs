@@ -2,9 +2,9 @@
 
 public class UserMessages
 {
-    public List<ScheduledMessage> ScheduledMessages { get; set; }
+    public List<ScheduledMessage> ScheduledMessages { get; set; } = new();
 
-    public List<RepeatedViaMinutesMessage> RepeatedViaMinutesMessages { get; set; }
+    public List<RepeatedViaMinutesMessage> RepeatedViaMinutesMessages { get; set; } = new();
 
-    public List<RepeatedViaSecondsMessage> RepeatedViaSecondsMessages { get; set; }
+    public List<RepeatedViaSecondsMessage> RepeatedViaSecondsMessages { get; set; } = new();
 }
