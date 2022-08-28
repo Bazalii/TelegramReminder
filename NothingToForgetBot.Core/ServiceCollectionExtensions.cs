@@ -43,7 +43,7 @@ public static class ServiceCollectionExtensions
             .AddSingleton<INoteHandler, NoteHandler>()
             .AddSingleton<IUserNoteSelector, UserNoteSelector>()
             .AddSingleton<ITimerHandler, TimerHandler>()
-            .AddSingleton<ResXResourceReader>(_ => new ResXResourceReader(configuration["ResourcesPath"]))
+            .AddSingleton(_ => new ResXResourceReader(configuration["ResourcesPath"]))
             .AddSingleton<IChatUpdateHandler, ChatUpdateHandler>();
 
         return services;
