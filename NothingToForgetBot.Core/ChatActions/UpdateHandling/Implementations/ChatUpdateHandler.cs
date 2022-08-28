@@ -99,7 +99,7 @@ public class ChatUpdateHandler : IChatUpdateHandler
 
             await RespondOnScheduledMessage(message, cancellationToken);
         }
-        catch (NotScheduledMessageException notScheduledMessageException)
+        catch (NotScheduledMessageException)
         {
             var note = new Note
             {

@@ -42,7 +42,7 @@ public class ScheduledMessageRepository : IScheduledMessageRepository
             Id = dbModel.Id,
             ChatId = dbModel.ChatId,
             Content = dbModel.Content,
-            PublishingDate = dbModel.PublishingDate,
+            PublishingDate = dbModel.PublishingDate
         };
     }
 

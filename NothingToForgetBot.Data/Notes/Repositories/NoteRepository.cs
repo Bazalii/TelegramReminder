@@ -52,7 +52,7 @@ public class NoteRepository : INoteRepository
             {
                 Id = note.Id,
                 ChatId = note.ChatId,
-                Content = note.Content,
+                Content = note.Content
             })
             .Where(note => note.ChatId == chatId)
             .ToListAsync(cancellationToken);

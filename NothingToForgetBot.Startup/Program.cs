@@ -10,13 +10,13 @@ using Telegram.Bot.Types.Enums;
 
 namespace NothingToForgetBot.Startup;
 
-public class Program
+public static class Program
 {
     private static IHost _host = null!;
 
     private static IConfiguration _configuration = null!;
 
-    static Task Main(string[] args)
+    private static Task Main(string[] args)
     {
         _host = CreateHostBuilder(args).Build();
 
@@ -25,7 +25,7 @@ public class Program
         return _host.RunAsync();
     }
 
-    static IHostBuilder CreateHostBuilder(string[] args) =>
+    private static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration((_, builder) =>
             {
