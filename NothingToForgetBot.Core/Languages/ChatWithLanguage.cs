@@ -2,7 +2,7 @@
 
 public class ChatWithLanguage
 {
-    public long ChatId { get; set; }
+    public long ChatId { get; init; }
 
     public string Language { get; set; } = string.Empty;
 }

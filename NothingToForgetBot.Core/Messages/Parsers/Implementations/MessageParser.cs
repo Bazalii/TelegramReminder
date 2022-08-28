@@ -92,7 +92,7 @@ public class MessageParser : IMessageParser
 
             var content = message[..(indexOfDay - 1)];
 
-            var second = 0;
+            const int second = 0;
             var hour = Convert.ToInt32(
                 message[(indexOfAt + atResourceValue.Length + 1)..indexOfTimeSeparator]);
             var minute =
@@ -128,7 +128,7 @@ public class MessageParser : IMessageParser
             var interval =
                 Convert.ToInt32(message[(indexOfEvery + everyResourceValue.Length + 1)..(indexOfMinutes - 1)]);
 
-            var second = 0;
+            const int second = 0;
             var hour = Convert.ToInt32(message[(indexOfUntil + untilResourceValue.Length + 1)..indexOfTimeSeparator]);
             var minute = Convert.ToInt32(message[(indexOfTimeSeparator + 1)..(indexOfTimeSeparator + 3)]);
 
@@ -161,7 +161,7 @@ public class MessageParser : IMessageParser
             var interval =
                 Convert.ToInt32(message[(indexOfEvery + everyResourceValue.Length + 1)..(indexOfSeconds - 1)]);
 
-            var second = 0;
+            const int second = 0;
             var hour = Convert.ToInt32(message[(indexOfUntil + untilResourceValue.Length + 1)..indexOfTimeSeparator]);
             var minute = Convert.ToInt32(message[(indexOfTimeSeparator + 1)..(indexOfTimeSeparator + 3)]);
 

@@ -2,7 +2,7 @@
 
 public class ChatTimeZone
 {
-    public long ChatId { get; set; }
+    public long ChatId { get; init; }
 
     public int TimeZone { get; set; }
 }
