@@ -158,7 +158,7 @@ public class ScheduledMessageHandler : IScheduledMessageHandler
         await _timerHandler.Add(repeatedMessage.Id, repeatedMessageTimers);
     }
 
-    private double CalculateEndTimerInterval(RepeatedMessage message)
+    private static double CalculateEndTimerInterval(RepeatedMessage message)
     {
         return (message.EndDate - DateTime.UtcNow).TotalMilliseconds;
     }

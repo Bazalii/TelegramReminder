@@ -171,17 +171,17 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
         await _unitOfWork.SaveChanges(cancellationToken);
     }
 
-    private int CalculateIndexOfSectionEnd(string message, string section)
+    private static int CalculateIndexOfSectionEnd(string message, string section)
     {
         return message.IndexOf(section, StringComparison.Ordinal) + section.Length;
     }
 
-    private int CalculateSavedObjectNumber(string message, int indexOfSectionEnd)
+    private static int CalculateSavedObjectNumber(string message, int indexOfSectionEnd)
     {
         return Convert.ToInt16(message[indexOfSectionEnd..]) - 1;
     }
 
-    private bool CheckIfNumberIsBiggerThanSectionObjectsTotalAmount(int messageNumber, int totalAmount)
+    private static bool CheckIfNumberIsBiggerThanSectionObjectsTotalAmount(int messageNumber, int totalAmount)
     {
         return messageNumber > totalAmount - 1;
     }
