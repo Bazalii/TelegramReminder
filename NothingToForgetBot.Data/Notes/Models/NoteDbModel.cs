@@ -5,7 +5,7 @@ namespace NothingToForgetBot.Data.Notes.Models;
 
 public class NoteDbModel
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     public long ChatId { get; set; }
 
