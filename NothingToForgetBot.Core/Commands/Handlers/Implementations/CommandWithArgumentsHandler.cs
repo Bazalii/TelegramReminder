@@ -48,7 +48,7 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
         }
     }
 
-    public async Task HandleDeleteCommand(long chatId, string message, string localisation,
+    private async Task HandleDeleteCommand(long chatId, string message, string localisation,
         CancellationToken cancellationToken)
     {
         var userRecords = await _userRecordSelector.Select(chatId, cancellationToken);
