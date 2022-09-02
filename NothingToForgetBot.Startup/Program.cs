@@ -13,7 +13,6 @@ namespace NothingToForgetBot.Startup;
 public static class Program
 {
     private static IHost _host = null!;
-
     private static IConfiguration _configuration = null!;
 
     private static Task Main(string[] args)
