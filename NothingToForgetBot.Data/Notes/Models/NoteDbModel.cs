@@ -6,9 +6,7 @@ namespace NothingToForgetBot.Data.Notes.Models;
 public class NoteDbModel
 {
     public Guid Id { get; init; }
-
     public long ChatId { get; set; }
-
     public string Content { get; set; } = string.Empty;
     
     internal class Map : IEntityTypeConfiguration<NoteDbModel>

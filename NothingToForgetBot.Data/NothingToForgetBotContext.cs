@@ -10,17 +10,11 @@ namespace NothingToForgetBot.Data;
 public class NothingToForgetBotContext : DbContext
 {
     public DbSet<LanguageDbModel> SupportedLanguages { get; set; }
-
     public DbSet<ChatWithLanguageDbModel> ChatsWithLanguage { get; set; }
-
     public DbSet<ChatTimeZoneDbModel> ChatTimeZones { get; set; }
-
     public DbSet<ScheduledMessageDbModel> ScheduledMessages { get; set; }
-
     public DbSet<RepeatedViaMinutesMessageDbModel> RepeatedViaMinutesMessages { get; set; }
-
     public DbSet<RepeatedViaSecondsMessageDbModel> RepeatedViaSecondsMessages { get; set; }
-
     public DbSet<NoteDbModel> Notes { get; set; }
 
     public NothingToForgetBotContext(DbContextOptions options)
