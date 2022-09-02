@@ -11,15 +11,10 @@ namespace NothingToForgetBot.Core.Commands.Handlers.Implementations;
 public class CommandHandler : ICommandHandler
 {
     private readonly IMessageSender _messageSender;
-
     private readonly ResXResourceReader _resourceReader;
-
     private readonly IChatLanguageRepository _chatLanguageRepository;
-
     private readonly ITimeZoneRepository _timeZoneRepository;
-
     private readonly IUserRecordSelector _userRecordSelector;
-
     private readonly IUnitOfWork _unitOfWork;
 
     public CommandHandler(IMessageSender messageSender, ResXResourceReader resourceReader,

@@ -8,15 +8,10 @@ namespace NothingToForgetBot.Core.Timers.Handlers.Implementations;
 public class TimerHandler : ITimerHandler
 {
     private readonly Dictionary<Guid, Timer> _scheduledMessageTimers = new();
-
     private readonly Dictionary<Guid, RepeatedMessageTimers> _repeatedMessageTimers = new();
-
     private readonly IScheduledMessageRepository _scheduledMessageRepository;
-
     private readonly IRepeatedViaMinutesMessageRepository _repeatedViaMinutesMessageRepository;
-
     private readonly IRepeatedViaSecondsMessageRepository _repeatedViaSecondsMessageRepository;
-
     private readonly IUnitOfWork _unitOfWork;
 
     public TimerHandler(IScheduledMessageRepository scheduledMessageRepository,
