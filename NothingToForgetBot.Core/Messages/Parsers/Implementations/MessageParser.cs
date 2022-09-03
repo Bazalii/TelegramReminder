@@ -9,7 +9,6 @@ namespace NothingToForgetBot.Core.Messages.Parsers.Implementations;
 public class MessageParser : IMessageParser
 {
     private readonly ResXResourceReader _resourceReader;
-
     private readonly ITimeZoneRepository _timeZoneRepository;
 
     public MessageParser(ResXResourceReader resourceReader, ITimeZoneRepository timeZoneRepository)

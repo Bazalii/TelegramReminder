@@ -11,7 +11,6 @@ namespace NothingToForgetBot.Data.Languages.Repositories;
 public class ChatLanguageRepository : IChatLanguageRepository
 {
     private readonly NothingToForgetBotContext _context;
-
     private readonly ResXResourceReader _resourceReader;
 
     public ChatLanguageRepository(NothingToForgetBotContext context, ResXResourceReader resourceReader)

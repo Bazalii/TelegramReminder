@@ -6,9 +6,7 @@ namespace NothingToForgetBot.Core.Messages.Selectors.Implementations;
 public class UserMessageSelector : IUserMessageSelector
 {
     private readonly IScheduledMessageRepository _scheduledMessageRepository;
-
     private readonly IRepeatedViaMinutesMessageRepository _repeatedViaMinutesMessageRepository;
-
     private readonly IRepeatedViaSecondsMessageRepository _repeatedViaSecondsMessageRepository;
 
     public UserMessageSelector(IScheduledMessageRepository scheduledMessageRepository,

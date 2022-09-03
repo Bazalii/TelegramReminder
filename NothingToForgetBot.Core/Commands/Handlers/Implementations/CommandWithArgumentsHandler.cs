@@ -14,17 +14,11 @@ namespace NothingToForgetBot.Core.Commands.Handlers.Implementations;
 public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
 {
     private readonly ITimerHandler _timerHandler;
-
     private readonly INoteRepository _noteRepository;
-
     private readonly ITimeZoneRepository _timeZoneRepository;
-
     private readonly ResXResourceReader _resourceReader;
-
     private readonly IUserRecordSelector _userRecordSelector;
-
     private readonly IMessageSender _messageSender;
-
     private readonly IUnitOfWork _unitOfWork;
 
     public CommandWithArgumentsHandler(ITimerHandler timerHandler, INoteRepository noteRepository,
@@ -54,7 +48,7 @@ public class CommandWithArgumentsHandler : ICommandWithArgumentsHandler
         }
     }
 
-    public async Task HandleDeleteCommand(long chatId, string message, string localisation,
+    private async Task HandleDeleteCommand(long chatId, string message, string localisation,
         CancellationToken cancellationToken)
     {
         var userRecords = await _userRecordSelector.Select(chatId, cancellationToken);

@@ -6,7 +6,6 @@ namespace NothingToForgetBot.Core.Notes.Handlers.Implementations;
 public class NoteHandler : INoteHandler
 {
     private readonly INoteRepository _noteRepository;
-
     private readonly IUnitOfWork _unitOfWork;
 
     public NoteHandler(INoteRepository noteRepository, IUnitOfWork unitOfWork)

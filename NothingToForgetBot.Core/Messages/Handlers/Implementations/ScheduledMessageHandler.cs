@@ -11,15 +11,10 @@ namespace NothingToForgetBot.Core.Messages.Handlers.Implementations;
 public class ScheduledMessageHandler : IScheduledMessageHandler
 {
     private readonly IScheduledMessageRepository _scheduledMessageRepository;
-
     private readonly IRepeatedViaMinutesMessageRepository _repeatedViaMinutesMessageRepository;
-
     private readonly IRepeatedViaSecondsMessageRepository _repeatedViaSecondsMessageRepository;
-
     private readonly IMessageSender _messageSender;
-
     private readonly ITimerHandler _timerHandler;
-
     private readonly IUnitOfWork _unitOfWork;
 
     public ScheduledMessageHandler(IScheduledMessageRepository scheduledMessageRepository,

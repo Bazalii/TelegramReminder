@@ -6,7 +6,6 @@ namespace NothingToForgetBot.Data.TimeZones.Models;
 public class ChatTimeZoneDbModel
 {
     public long ChatId { get; set; }
-
     public int TimeZone { get; set; }
     
     internal class Map : IEntityTypeConfiguration<ChatTimeZoneDbModel>

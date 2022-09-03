@@ -7,10 +7,8 @@ namespace NothingToForgetBot.Core.ChatActions.RecordSelectors.Implementations;
 public class UserRecordSelector : IUserRecordSelector
 {
     private readonly IUserMessageSelector _messageSelector;
-
     private readonly IUserNoteSelector _noteSelector;
-
-
+    
     public UserRecordSelector(IUserMessageSelector messageSelector, IUserNoteSelector noteSelector)
     {
         _messageSelector = messageSelector;

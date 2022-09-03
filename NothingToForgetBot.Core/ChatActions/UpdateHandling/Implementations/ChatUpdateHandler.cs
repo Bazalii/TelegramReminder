@@ -19,23 +19,14 @@ namespace NothingToForgetBot.Core.ChatActions.UpdateHandling.Implementations;
 public class ChatUpdateHandler : IChatUpdateHandler
 {
     private readonly ICommandParser _commandParser;
-
     private readonly ICommandWithArgumentsParser _commandWithArgumentsParser;
-
     private readonly IMessageParser _messageParser;
-
     private readonly ISupportedLanguagesRepository _supportedLanguagesRepository;
-
     private readonly ICommandHandler _commandHandler;
-
     private readonly ICommandWithArgumentsHandler _commandWithArgumentsHandler;
-
     private readonly INoteHandler _noteHandler;
-
     private readonly IScheduledMessageHandler _scheduledMessageHandler;
-
     private readonly IChatLanguageRepository _chatLanguageRepository;
-
     private readonly IMessageSender _messageSender;
 
     public ChatUpdateHandler(ICommandParser commandParser, ICommandWithArgumentsParser commandWithArgumentsParser,
