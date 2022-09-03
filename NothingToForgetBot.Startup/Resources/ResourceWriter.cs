@@ -13,7 +13,7 @@ public class ResourceWriter
         resx.AddResource("CommandLanguage", "/language");
         resx.AddResource("CommandList", "/list");
         resx.AddResource("CommandDelete", "/delete");
-        resx.AddResource("CommandSetTimeZone", "/setTimeZone");
+        resx.AddResource("CommandSetTimeZone", "/timezone");
         resx.AddResource("CommandEn", "/en");
         resx.AddResource("CommandRu", "/ru");
 
@@ -34,7 +34,9 @@ public class ResourceWriter
 
         //Guide
         resx.AddResource("EnGuide",
-            "This bot can be used for scheduling notifications or handling your notes.\n" +
+            "This bot can be used for scheduling notifications or handling your notes.\n\n" +
+            "First of all, set time zone: /timezone -1 or /timezone 3.\n" +
+            "Secondly, choose appropriate language. More info: /language.\n\n" +
             "You can schedule a notification that will be published once: eat in 2 min, go to bed in 30 sec.\n" +
             "It is also possible to set the concrete publishing date: eat at 18:30.\n" +
             "Furthermore you can set repeated notifications that will be published until specific time:\n" +
@@ -76,6 +78,8 @@ public class ResourceWriter
         //Guide
         resx.AddResource("RuGuide",
             "Этот бот может быть использован для отложенных уведомлений и заметок.\n" +
+            "Прежде всего установите часовой пояс: /timezone -1 or /timezone 3.\n" +
+            "Затем выберите язык, который вам больше нравится. Больше информации: /language.\n" +
             "Можно отложить однократное уведомление: поесть через 2 мин, пойти спать через 30 сек.\n" +
             "Ещё возможно задать конкретную дату уведомления: покушать в 18:30.\n" +
             "Более того, поддерживаются уведомления, которые будут повторяться до определённого времени:\n" +
