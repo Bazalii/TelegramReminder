@@ -61,22 +61,19 @@ public class ChatUpdateHandler : IChatUpdateHandler
 
         var currentLanguage = await _chatLanguageRepository.GetLanguageByChatIdOrDefault(chatId, cancellationToken);
 
-        var command = await Task.Run(() => _commandParser.Parse(messageText), cancellationToken);
+        var command = _commandParser.Parse(messageText);
 
         if (command != Command.NotCommand)
         {
-            await Task.Run(() => RespondOnCommand(command, chatId, messageText, cancellationToken), cancellationToken);
+            await RespondOnCommand(command, chatId, messageText, cancellationToken);
             return;
         }
 
-        var commandWithArguments =
-            await Task.Run(() => _commandWithArgumentsParser.Parse(messageText), cancellationToken);
+        var commandWithArguments = _commandWithArgumentsParser.Parse(messageText);
 
         if (commandWithArguments != CommandWithArguments.NotCommandWithArguments)
         {
-            await Task.Run(
-                () => RespondOnCommandWithArguments(commandWithArguments, chatId, currentLanguage, messageText,
-                    cancellationToken),
+            await RespondOnCommandWithArguments(commandWithArguments, chatId, currentLanguage, messageText,
                 cancellationToken);
             return;
         }
